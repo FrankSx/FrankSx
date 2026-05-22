@@ -1,0 +1,5 @@
+# Jekyll configuration for GitHub Pages
+title: Avatar Test
+description: Testing avatar fetching
+show_downloads: false
+theme: jekyll-theme-minimal
