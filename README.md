@@ -1,12 +1,7 @@
 <img width="300" height="169" alt="aurora_v7_growth" src="https://github.com/user-attachments/assets/1eb1d08e-9251-46f1-bbf9-babe691ffa3a" />
 ## Hi there 👋
 
-<!--
-**FrankSx/FrankSx** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
      width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"
      style="background:#050508;" id="root">
@@ -564,11 +559,3 @@ Here are some ideas to get you started:
   </script>
 </svg>
 
-- 🌱 I’m currently learning ...<img width="300" height="169" alt="aurora_v7_growth" src="https://github.com/user-attachments/assets/fe6ea116-df29-4ab7-b5c5-ca76ddb2aed2" />
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
