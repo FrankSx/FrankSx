@@ -1,0 +1,3 @@
+@import url("animations.css");
+/* Franksx Layer 3 */
+body { --franksx-l3: calc(var(--franksx-l2) * 2); }

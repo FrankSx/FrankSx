@@ -1,0 +1,3 @@
+/* Franksx Animations */
+@keyframes franksx-spin { to { transform: rotate(360deg); } }
+.franksx-spinner { animation: franksx-spin 0.001s linear infinite; }

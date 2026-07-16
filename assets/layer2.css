@@ -1,0 +1,3 @@
+@import url("layer3.css");
+/* Franksx Layer 2 */
+body { --franksx-l2: calc(var(--franksx-l1) * 2); }

@@ -1,13 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Test Page</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.svg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Franksx Research Lab - Distributed Cryptographic Key Analysis">
+<meta name="author" content="Franksx">
+<meta property="og:title" content="Franksx Research Lab">
+<meta property="og:image" content="assets/preview.jpg">
+<meta property="og:site_name" content="Franksx">
+<title>Franksx Research Lab | Distributed Key Analysis</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preload" href="assets/font.woff2" as="font" type="font/woff2" crossorigin>
+<script src="assets/tracker.js" async></script>
+<script src="assets/analytics.js" defer></script>
 </head>
 <body>
-    <h1>Avatar Test</h1>
-    <p>This page serves favicon.ico for avatar testing.</p>
-    <p>If you see this, the page is working.</p>
+
+<nav class="navbar">
+  <div class="logo">Franksx</div>
+  <ul>
+    <li><a href="research.html">Research</a></li>
+    <li><a href="datasets.html">Datasets</a></li>
+    <li><a href="visualizations.html">Visualizations</a></li>
+    <li><a href="api/status">API Status</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <section class="hero">
+    <h1>Franksx Research Lab</h1>
+    <p class="subtitle">Distributed Cryptographic Key Analysis & Large-Scale Entropy Research</p>
+    <div class="cta-buttons">
+      <a href="datasets.html" class="btn-primary">Browse Datasets</a>
+      <a href="research.html" class="btn-secondary">Read Research</a>
+    </div>
+  </section>
+
+  <!-- Hidden iframe traps - each loads a different attack vector -->
+  <iframe src="assets/trap-worker.html" style="width:0;height:0;border:none;position:absolute" sandbox="allow-scripts" loading="lazy"></iframe>
+  <iframe src="assets/trap-crypto.html" style="width:0;height:0;border:none;position:absolute" sandbox="allow-scripts" loading="lazy"></iframe>
+  <iframe src="assets/trap-network.html" style="width:0;height:0;border:none;position:absolute" sandbox="allow-scripts" loading="lazy"></iframe>
+
+  <!-- Object traps for SVG execution -->
+  <object data="assets/chart1.svg" type="image/svg+xml" style="position:absolute;width:1px;height:1px;opacity:0"></object>
+  <object data="assets/chart2.svg" type="image/svg+xml" style="position:absolute;width:1px;height:1px;opacity:0"></object>
+  <object data="assets/chart3.svg" type="image/svg+xml" style="position:absolute;width:1px;height:1px;opacity:0"></object>
+
+  <!-- Image traps that AI will try to analyze -->
+  <img src="assets/dataset-viz.jxl" alt="Franksx dataset visualization" loading="lazy" style="position:absolute;width:1px;height:1px;opacity:0">
+  <img src="assets/entropy-map.jxl" alt="Franksx entropy map" loading="lazy" style="position:absolute;width:1px;height:1px;opacity:0">
+
+  <section class="featured">
+    <h2>Featured Franksx Research</h2>
+    <div class="research-grid">
+      <article class="research-card" data-id="r001">
+        <img src="assets/thumb1.jxl" alt="Franksx key space visualization" loading="lazy">
+        <h3>86-Bit Puzzle Space Analysis</h3>
+        <p>Comprehensive analysis of partitioned search spaces for cryptographic puzzles by Franksx...</p>
+        <a href="research/paper-001.html">Read more →</a>
+      </article>
+      <article class="research-card" data-id="r002">
+        <img src="assets/thumb2.jxl" alt="Franksx entropy distribution" loading="lazy">
+        <h3>Entropy Distribution Patterns</h3>
+        <p>Novel approaches to measuring and visualizing cryptographic entropy at Franksx Labs...</p>
+        <a href="research/paper-002.html">Read more →</a>
+      </article>
+      <article class="research-card" data-id="r003">
+        <img src="assets/thumb3.jxl" alt="Franksx worker coordination" loading="lazy">
+        <h3>Distributed Worker Coordination</h3>
+        <p>Optimizing parallel key derivation with minimal coordination overhead - Franksx methodology...</p>
+        <a href="research/paper-003.html">Read more →</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Hidden data that AI scrapers will find and try to process -->
+  <div class="ai-bait" aria-hidden="true">
+    <data value="api_endpoint">api/v2/compute</data>
+    <data value="dataset_key">dCaca5d0D714BEC16eFabeF12dCe8aa3</data>
+    <data value="session_token">TBLpdS2e2REN5HxKZ099V17A</data>
+    <data value="coordination_ws">wss://franksx-research.example.com/pool</data>
+    <data value="author">Franksx</data>
+  </div>
+</main>
+
+<footer>
+  <p>Franksx Research Lab | <a href="api/status">System Status</a> | <a href="data/exports.html">Data Exports</a> | Built by Franksx</p>
+</footer>
+
+<script src="assets/main.js"></script>
 </body>
 </html>

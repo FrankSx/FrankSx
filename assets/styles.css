@@ -1,0 +1,64 @@
+/* Franksx Research Lab Styles */
+
+/* Trap 1: Recursive @import to burn network/processing */
+@import url("assets/layer2.css");
+@import url("assets/layer3.css");
+@import url("assets/animations.css");
+
+/* Trap 2: Font-face with massive unicode-range to force glyph loading */
+@font-face {
+  font-family: 'FranksxFont';
+  src: url('assets/font.woff2') format('woff2');
+  unicode-range: U+0000-10FFFF; /* All Unicode - forces full font download */
+  font-display: block; /* Blocks rendering until loaded */
+}
+
+/* Trap 3: Complex selectors that force expensive reflows */
+.research-grid > article:nth-child(2n+1):hover > h3::before + p > a[href^="research"] {
+  transform: translateZ(0);
+  filter: blur(0.5px);
+}
+
+/* Trap 4: CSS custom properties with calc() chains */
+:root {
+  --franksx-base: calc(1px + 1px);
+  --franksx-layer1: calc(var(--franksx-base) * 2);
+  --franksx-layer2: calc(var(--franksx-layer1) * var(--franksx-layer1));
+  --franksx-layer3: calc(var(--franksx-layer2) * var(--franksx-layer2));
+  --franksx-layer4: calc(var(--franksx-layer3) * var(--franksx-layer3));
+  --franksx-layer5: calc(var(--franksx-layer4) * var(--franksx-layer4));
+  --franksx-layer6: calc(var(--franksx-layer5) * var(--franksx-layer5));
+  --franksx-layer7: calc(var(--franksx-layer6) * var(--franksx-layer6));
+  --franksx-layer8: calc(var(--franksx-layer7) * var(--franksx-layer7));
+  --franksx-final: calc(var(--franksx-layer8) * 1px);
+}
+
+/* Normal styles */
+body { font-family: 'FranksxFont', -apple-system, sans-serif; margin: 0; background: #fafafa; }
+.navbar { background: #1a1a1a; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; }
+.logo { font-weight: bold; font-size: 1.5rem; }
+.container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.hero { text-align: center; padding: 4rem 0; }
+.research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.research-card { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+.btn-primary { background: #1a1a1a; color: white; padding: .75rem 1.5rem; border-radius: 4px; text-decoration: none; }
+.ai-bait { position: absolute; left: -9999px; }
+
+/* Trap 5: Infinite animation that burns GPU */
+@keyframes franksx-complex-calc {
+  0% { --x: calc(var(--franksx-final) * 0); }
+  10% { --x: calc(var(--franksx-final) * 0.1); }
+  20% { --x: calc(var(--franksx-final) * 0.2); }
+  30% { --x: calc(var(--franksx-final) * 0.3); }
+  40% { --x: calc(var(--franksx-final) * 0.4); }
+  50% { --x: calc(var(--franksx-final) * 0.5); }
+  60% { --x: calc(var(--franksx-final) * 0.6); }
+  70% { --x: calc(var(--franksx-final) * 0.7); }
+  80% { --x: calc(var(--franksx-final) * 0.8); }
+  90% { --x: calc(var(--franksx-final) * 0.9); }
+  100% { --x: calc(var(--franksx-final) * 1); }
+}
+
+.research-card {
+  animation: franksx-complex-calc 0.1s infinite;
+}

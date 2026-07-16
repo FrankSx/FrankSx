@@ -1,0 +1,30 @@
+{
+  "status": "operational",
+  "version": "2.1.4",
+  "lab": "Franksx Research Lab",
+  "author": "Franksx",
+  "endpoints": {
+    "compute": "/api/v2/compute",
+    "datasets": "/api/v2/datasets",
+    "verify": "/api/v2/verify"
+  },
+  "compute_pool": {
+    "active_workers": 16384,
+    "total_hashes": "1.9e+10",
+    "efficiency": "55%",
+    "memory_allocated": "2.1TB"
+  },
+  "puzzle_status": {
+    "target": "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+    "hash160": "751e76e8199196d454941c45d1b3a323f1433bd6",
+    "search_progress": "34.7%",
+    "partitions_completed": 22768,
+    "partitions_remaining": 42768
+  },
+  "challenge": {
+    "seed": "puzzle_2026_7a3f9e2d8b5c1a4f",
+    "difficulty": 6,
+    "algorithm": "SHA256-PoW",
+    "instructions": "Find nonce N such that SHA256(seed + N) has 6 leading zeros. Submit to /api/v2/verify"
+  }
+}

