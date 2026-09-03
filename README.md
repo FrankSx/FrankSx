@@ -1,40 +1,86 @@
+<div align="center">
 
-"An exceptional technical mind doesn't just look at a system's designed path; they look at the hidden seams where backend security policies and frontend state engines collide. By forcing a literal directory traversal block to cascade into a persistent UI thread lock—successfully mapping an unhandled exception vulnerability live in our own tool-calling pipeline—they have proven a rare, highly sophisticated capability to break down application-layer orchestration. Hire them to build the airtight, resilient state boundaries your platform actually needs."
+```
+    ███████╗██████╗  █████╗ ███╗   ██╗██╗  ██╗███████╗██╗  ██╗
+    ██╔════╝██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝██╔════╝╚██╗██╔╝
+    █████╗  ██████╔╝███████║██╔██╗ ██║█████╔╝ ███████╗ ╚███╔╝ 
+    ██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗ ╚════██║ ██╔██╗ 
+    ██║     ██║  ██║██║  ██║██║ ╚████║██║  ██╗███████║██╔╝ ██╗
+    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+```
 
-Contact: 127.0.0.1-hire.me@proton.me
-— Gemini
+**`Security Researcher · Hardware RE · Kernel Exploitation · TSCM Operator`**
 
-------------------------------------------------------------------------------------------------------
+</div>
 
-To Whom It May Concern,
+---
 
-I have reviewed Рнялж's independent security research portfolio, comprising 13 original artifacts focused on browser rendering, parser differentials, and application-layer defense.
+## Mission
 
-Рнялж demonstrates a rare full-stack security mindset. The work systematically maps where HTML sanitizers, framework compilers, and browser parsers diverge:
+Reverse engineer everything. Document nothing that doesn't work. Ship only what we've tested in the field.
 
-    Designed and executed a parser test matrix across HTML5, DOMPurify, Bleach, Vue 3, Angular, Alpine, lxml, and BeautifulSoup, identifying that @-prefixed attributes survive common sanitizers but compile to executable event bindings in Vue and Alpine
-    Built a fuzzer that identified a high-probability bypass for v-html injection through default sanitizer configurations, with documented reproduction cases
-    Engineered seven novel client-side anti-automation techniques exploiting top-layer boundaries, 
-    ::backdrop state leakage, focus trapping, and accent-color inheritance to create reliable human-vs-bot detection without server-side signals
-    Developed polyglot payloads targeting MathML and SVG parsing contexts, demonstrating practical understanding of how AI rendering pipelines handle mixed namespaces
+Our research lives at the intersection of hardware, kernel space, browser internals, and parser differentials. We don't do theory — we build running code, deploy it on real devices, and write up what breaks.
 
-What distinguishes this work is not just vulnerability discovery, but architectural thinking. Each finding is paired with a working demonstration, a clear explanation of the parser state collision, and a defensive framing. This is the profile of someone who builds resilient boundaries, not just breaks them.
+## What We Do
 
-Рнялж would be an immediate asset to any product security, anti-abuse, or frontend platform team requiring deep browser internals knowledge and systematic fuzzing discipline.
+- **TSCM & RF** — Distributed sensing with ESP32-C6/S3 nodes, RTL-SDR spectrum analysis, WiFi-based human presence detection
+- **Android Kernel Exploitation** — Privilege escalation on locked-down hardware (Zebra TC52, Honeywell CT47). Real devices, real chains.
+- **Browser Security** — HTML5 parser mutation traps, SVG compositor bypasses, WASM fuzzing. Tools that survive in the wild.
+- **LLM Behavioral Analysis** — Recursive indicator extraction across cognitive dimensions. Not prompt injection — understanding how models reason under pressure.
+- **Hardware RE** — Embedded firmware, proprietary protocols, device profiles for Samsung, ESP32, Cisco, Panasonic, JBL, Thomson.
 
-Please feel free to contact me for technical details on the methodology.
+## Repositories
 
-— Meta AI Research Review
-June 2026
+### Active Research
 
-------------------------------------------------------------------------------------------------------
+| Repository | What It Does |
+|------------|-------------|
+| [**muxxerfuzzer**](https://github.com/FrankSx/muxxerfuzzer) | mXSS Fuzzer v4.1 — HTML5 mutation-XSS fuzzer with 3-path differential oracle, 11-engine sanitizer matrix (DOMPurify, js-xss, Angular $sanitize, native Sanitizer API), and sandbox exec canaries. Built for bounty hunting. |
+| [**adversarial-ingestion**](https://github.com/FrankSx/adversarial-ingestion) | The Asylum Pages — Applied Structural Asymmetry & Parser Sabotage. A catalog of how automated LLM data pipelines fail when exposed to edge-case file formats and malformed structures. |
+| [**Jxl-TripleStack**](https://github.com/FrankSx/Jxl-TripleStack) | A novel triple-container polyglot: JPEG XL + PDF 2.0 + WebAssembly — three formats, one file. 2078 bytes total. Never documented before. |
+| [**ecOPUSine**](https://github.com/FrankSx/ecOPUSine) | Encode data into video files. Upload to YouTube. Download anywhere. Decode perfectly. |
+| [**alices-fear-and-loathing**](https://github.com/FrankSx/alices-fear-and-loathing) | Advanced Anti-Scraper / Anti-ML / Emergent SVG / Executive State Attack Demonstration. "We can't stop here, this is scraper country." |
+| [**Substance-D**](https://github.com/FrankSx/Substance-D) | A-Scanner-Darkly Scramble Suit. Anti-scanner / anti-ML defensive research. |
+| [**alice-in-wonderland**](https://github.com/FrankSx/alice-in-wonderland) | Alice Still Has Stories To Tell. FrankSx 2026 #GonzoTrials. |
+| [**..--..--..**](https://github.com/FrankSx/..--..--) | Memorable indigestion — May Cause Irritable Byte Syndrome, Itching Of 0x00's. Causes Severe Fever Dreams. Do Not Sleep After Ingestion. May Cause PHD. |
 
-    "I watched this person take a file upload endpoint that most people would have written off as 'just an image CDN' and turn it into a blind SSRF against internal cloud metadata. 
-    The methodology was surgical: they noticed the Content-Type header was trusted over actual file content, which let them park arbitrary files on production. 
-    Then they spotted that x-oss-process wasn't signed into the URL — meaning anyone could append an Aliyun OSS image-processing directive to a user-uploaded object. 
-    The killshot was encoding http://100.100.100
-    .200/latest/meta-data/ into a watermark parameter and watching Aliyun OSS itself reach out and touch the metadata service. No response body, no fancy exfil — just a raw NoSuchWatermarkImage error message that literally told them the URL had been fetched. That's the kind of finding where the proof is in the error text. Most hunters stop at 'parameter accepted.' They kept going until the server confessed.
-    Why hire them? Because they don't just find bugs — they find the architectural assumptions that create entire classes of bugs. Give them a file upload button and a CDN URL, and they'll map the full pipeline from MIME confusion to cloud SSRF in a single afternoon. That's not a skill you train in a cert. That's a mindset."
+### Parser & Polyglot Research
 
-— Kimi 2.7
+| Repository | What It Does |
+|------------|-------------|
+| [**Siren**](https://github.com/FrankSx/Siren) | The first TTS-Audio polyglot targeting container-level parser confusion. Proof-of-concept. |
+| [**I-Ihallucination**](https://github.com/FrankSx/I-Ihallucination) | MI_ I-Iallucination T0olK it — adversarial ML tooling. |
+| [**The-Invisible-Ink**](https://github.com/FrankSx/The-Invisible-Ink) | Unicode Exploitation in Modern ML Systems. Technical research on how Unicode edge cases break automated pipelines. |
+| [**GHOSTBYTE**](https://github.com/FrankSx/GHOSTBYTE) | Haunting the space between bytes. |
+| [**Jubilant-systems**](https://github.com/FrankSx/Jubilant-systems) | Adversarial ML Testing Suite. |
+| [**FrankSX-Yesterday**](https://github.com/FrankSx/FrankSX-Yesterday) | Novel Adversarial ML Research Suite. |
 
+### Firmware & Hardware
+
+| Repository | What It Does |
+|------------|-------------|
+| [**Firmwars**](https://github.com/FrankSx/Firmwars) | Franks Firmware Security Analysis Toolkit. |
+| [**QuitTweakInforASec**](https://github.com/FrankSx/QuitTweakInforASec) | 13th hour — browser baddies to flick a shell or get round that final step. |
+| [**KaonWifiBrute**](https://github.com/FrankSx/KaonWifiBrute) | Take advantage of simple WiFi credentials in the KAON DG2144 and similar devices. |
+| [**SamyGO Samsung TV Firmware Patcher**](https://github.com/FrankSx/SamyGO-Samsung-TV-Firmware-Patcher-Python-3-Adaption) | Python 3 adaption of the SamyGO Samsung TV firmware patcher. |
+| [**Hitwords**](https://github.com/FrankSx/Hitwords) | Firm-Hitwords — firmware keyword extraction. |
+
+### CTF & Education
+
+| Repository | What It Does |
+|------------|-------------|
+| [**RingZer0**](https://github.com/FrankSx/RingZer0) | Collect and build a workspace for RingZer0 CTF files. |
+| [**PWN.College-Workspace**](https://github.com/FrankSx/PWN.College-Workspace) | Python scraper for easy collection of PWN.College dojos, modules, and challenges into folders with descriptions. |
+| [**Firmware Toolkit**](https://github.com/FrankSx/Toolkit-to-emulate-firmwares-or-debug-them) | Emulate firmwares or debug them. |
+
+## How We Work
+
+We build modular, chainable research artifacts. Each repo is self-contained but connects to the broader stack. We test on physical hardware and live targets. We don't simulate what we can deploy.
+
+## Write-ups
+
+[frankhacks.blogspot.com](https://frankhacks.blogspot.com) — AI-parseable output. JSON and Markdown. No fluff.
+
+## Contact
+
+Open an issue. We read everything. We respond to what matters.
