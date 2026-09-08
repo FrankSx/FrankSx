@@ -1,94 +1,1035 @@
 <!DOCTYPE html>
+<!--
+  SPECTRE — runtime-only index for the domain-trap honeypot.
+  Design rule: the served file contains structure, never prose.
+  All copy is base64-injected at runtime; the hero is a canvas particle field.
+  GitHub-facing focal page. Honeypot field at the bottom must stay for deploys.
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Franksx Research Lab - Distributed Cryptographic Key Analysis">
-<meta name="author" content="Franksx">
-<meta property="og:title" content="Franksx Research Lab">
-<meta property="og:image" content="assets/preview.jpg">
-<meta property="og:site_name" content="Franksx">
-<title>Franksx Research Lab | Distributed Key Analysis</title>
-<link rel="stylesheet" href="assets/styles.css">
+<meta name="description" content="CryptoLab Research Portal — distributed cryptographic key analysis, entropy partitioning and worker coordination.">
+<meta property="og:title" content="CryptoLab — Distributed Key Analysis">
+<meta property="og:url" content="https://github.com/FrankSx/FrankSx">
+<meta property="og:description" content="Advanced research platform for large-scale entropy analysis and key space partitioning.">
+<title>CryptoLab — Distributed Key Analysis</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="preload" href="assets/font.woff2" as="font" type="font/woff2" crossorigin>
-<script src="assets/tracker.js" async></script>
-<script src="assets/analytics.js" defer></script>
-</head>
-<body>
+<style>
+:root{
+  --bg:#04060b; --panel:#080d18; --panel2:#0a1120; --line:#152238; --line2:#1e3050;
+  --phos:#5dffb0; --violet:#8b7bff; --amber:#ffb454; --red:#ff5470;
+  --ink:#c9d6e8; --dim:#5f7191; --faint:#33415c;
+  --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--mono);
+  font-size:15px; line-height:1.65; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--phos);color:#03130a}
+a{color:inherit;text-decoration:none}
 
-<nav class="navbar">
-  <div class="logo">Franksx</div>
+/* ---------- atmosphere ---------- */
+#mesh{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+.scanlines{
+  position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.55;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px);
+}
+.vignette{
+  position:fixed;inset:0;z-index:59;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 8%,transparent 40%,rgba(2,4,9,.55) 82%,rgba(1,2,6,.9) 100%);
+}
+main,nav,footer{position:relative;z-index:2}
+
+/* ---------- cursor ---------- */
+@media (hover:hover) and (pointer:fine){
+  body.cursor-on, body.cursor-on a, body.cursor-on button{cursor:none}
+  #cur{position:fixed;z-index:99;top:0;left:0;pointer-events:none;mix-blend-mode:difference}
+  #cur .dot{position:absolute;width:5px;height:5px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
+  #cur .ring{position:absolute;width:30px;height:30px;border:1px solid rgba(255,255,255,.85);border-radius:50%;transform:translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s}
+  #cur.hot .ring{width:46px;height:46px;border-color:var(--phos)}
+}
+
+/* ---------- nav ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(16px,4vw,44px);height:58px;
+  background:rgba(4,6,11,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.32em;color:var(--ink)}
+.brand svg{display:block}
+.brand .tag{font-size:9px;letter-spacing:.2em;color:var(--faint);border:1px solid var(--line);padding:2px 6px;border-radius:2px}
+nav ul{display:flex;gap:clamp(12px,3vw,34px);list-style:none}
+nav ul a{font-size:11px;letter-spacing:.22em;color:var(--dim);padding:6px 2px;position:relative;transition:color .2s}
+nav ul a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--phos);transition:width .25s}
+nav ul a:hover{color:var(--phos)}
+nav ul a:hover::after{width:100%}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:110px 20px 40px;position:relative}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.34em;color:var(--dim);
+  border:1px solid var(--line);padding:8px 16px;border-radius:999px;margin-bottom:26px;background:rgba(8,13,24,.6)
+}
+.eyebrow .pulse{width:6px;height:6px;border-radius:50%;background:var(--phos);box-shadow:0 0 10px var(--phos);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+#heroCanvas{width:min(1100px,94vw);height:min(46vh,480px);display:block}
+.hero-sub{max-width:640px;color:var(--dim);font-size:13.5px;margin-top:10px}
+.hero-sub b{color:var(--ink);font-weight:600}
+
+/* ---------- toggle ---------- */
+.mode-row{display:flex;align-items:center;gap:14px;margin-top:38px;user-select:none}
+.mode-lab{font-size:10px;letter-spacing:.28em;transition:color .25s}
+.mode-lab.on{color:var(--phos)}
+.mode-lab.off{color:var(--faint)}
+.switch{
+  width:64px;height:28px;border:1px solid var(--line2);border-radius:999px;background:var(--panel);
+  position:relative;cursor:pointer;transition:border-color .25s,background .25s;
+}
+.switch .knob{
+  position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:var(--phos);box-shadow:0 0 14px rgba(93,255,176,.7);
+  transition:transform .3s cubic-bezier(.6,-0.28,.3,1.4),background .25s,box-shadow .25s;
+}
+.switch[aria-checked="true"]{background:#1a0d12;border-color:#5a2433}
+.switch[aria-checked="true"] .knob{transform:translateX(36px);background:var(--red);box-shadow:0 0 14px rgba(255,84,112,.7)}
+
+/* ---------- telemetry ---------- */
+.telemetry{
+  margin-top:52px;width:min(980px,94vw);
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);border-radius:6px;background:rgba(8,13,24,.62);backdrop-filter:blur(8px);
+}
+.tcell{padding:18px 20px;border-left:1px solid var(--line)}
+.tcell:first-child{border-left:none}
+.tlab{font-size:9px;letter-spacing:.26em;color:var(--faint);margin-bottom:8px;white-space:nowrap}
+.tval{font-size:clamp(18px,2.4vw,26px);color:var(--phos);font-weight:600;letter-spacing:.04em;line-height:1.1;min-height:1.1em}
+.tval.red{color:var(--red)}
+.tval .cur{display:inline-block;width:.55em;height:1em;background:currentColor;vertical-align:-.12em;margin-left:4px;animation:pulse 1.1s steps(2) infinite}
+#spark{display:block;margin-top:8px}
+
+/* ---------- harvest terminal ---------- */
+#harvest{
+  width:min(980px,94vw);margin:26px auto 0;overflow:hidden;
+  max-height:0;opacity:0;transition:max-height .6s cubic-bezier(.7,0,.3,1),opacity .4s;
+}
+#harvest.open{max-height:560px;opacity:1}
+.term{
+  border:1px solid #3a1622;border-radius:6px;background:#070309;
+  box-shadow:0 0 0 1px rgba(255,84,112,.08),0 30px 80px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+.term-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#0d0510;border-bottom:1px solid #2a1018}
+.term-bar i{width:9px;height:9px;border-radius:50%;display:block}
+.term-bar i:nth-child(1){background:#ff5f57}.term-bar i:nth-child(2){background:#febc2e}.term-bar i:nth-child(3){background:#28c840}
+.term-bar span{margin-left:8px;font-size:10px;letter-spacing:.22em;color:#8a5561}
+.term-body{padding:18px 20px;font-size:12.5px;line-height:1.9;min-height:280px;color:#c9a3ad}
+.term-body .ln{white-space:pre-wrap;word-break:break-word}
+.term-body .c{color:#e8cdd4}
+.term-body .c::before{content:"$ ";color:#6b3644}
+.term-body .o{color:#a97f8b}
+.term-body .ok{color:#5dffb0}
+.term-body .bad{color:#ff5470}
+.caret{display:inline-block;width:8px;height:14px;background:#e8cdd4;vertical-align:-2px;animation:pulse .9s steps(2) infinite}
+
+/* ---------- feature sections ---------- */
+.section{width:min(1180px,94vw);margin:0 auto;padding:120px 0}
+.rule{display:flex;align-items:center;gap:16px;margin-bottom:56px}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:var(--line)}
+.rule span{font-size:10px;letter-spacing:.4em;color:var(--faint)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
+.kicker{font-size:10px;letter-spacing:.3em;color:var(--violet);margin-bottom:14px}
+h2{font-size:clamp(24px,3.4vw,40px);line-height:1.15;letter-spacing:.02em;color:#eaf2ff;font-weight:600;margin-bottom:20px}
+.split p{color:var(--dim);font-size:14px;max-width:52ch}
+.split p b{color:var(--ink);font-weight:600}
+
+/* dom skeleton card (feature 1 visual) */
+.skel{
+  border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg,var(--panel),var(--panel2));
+  padding:26px 26px 20px;font-size:12.5px;line-height:2.1;box-shadow:0 24px 70px rgba(0,0,0,.5);
+  position:relative;overflow:hidden;
+}
+.skel::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(93,255,176,.025) 0 1px,transparent 1px 4px);pointer-events:none}
+.skel .row{display:flex;gap:14px}
+.skel .n{color:var(--faint);width:2ch;text-align:right;flex:none}
+.skel .t{color:#8fa3c8}
+.skel .t .el{color:var(--phos)}
+.skel .t .at{color:var(--violet)}
+.skel .t .cm{color:var(--faint);font-style:italic}
+.skel .verdict{
+  margin-top:16px;padding-top:14px;border-top:1px dashed var(--line2);
+  display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.22em;
+}
+.skel .verdict b{color:var(--red);font-weight:600}
+.skel .stamp{
+  position:absolute;top:14px;right:-32px;transform:rotate(38deg);
+  font-size:9px;letter-spacing:.3em;color:var(--red);border:1px solid var(--red);
+  padding:3px 34px;opacity:.75;background:rgba(255,84,112,.06)
+}
+
+/* receipt card (feature 2 visual) */
+.receipt{
+  border:1px solid #3a2c14;border-radius:8px;background:linear-gradient(180deg,#0d0a05,#0a0803);
+  padding:28px;font-size:12.5px;box-shadow:0 24px 70px rgba(0,0,0,.5);position:relative;overflow:hidden;
+}
+.receipt::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,180,84,.03) 0 1px,transparent 1px 4px);pointer-events:none}
+.receipt h4{font-size:10px;letter-spacing:.34em;color:var(--amber);text-align:center;margin-bottom:20px;font-weight:600}
+.receipt .rline{display:flex;justify-content:space-between;color:#9c8a6d;padding:7px 0;border-bottom:1px dashed #2c2416}
+.receipt .rline b{color:#f0d9ae;font-weight:600}
+.receipt .verdict{
+  margin-top:20px;text-align:center;font-size:11px;letter-spacing:.34em;color:#03130a;
+  background:var(--amber);padding:10px;border-radius:3px;font-weight:700;
+}
+
+/* ---------- lab grid ---------- */
+.lab{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:8px}
+.card{
+  background:var(--panel);padding:30px 24px 26px;display:flex;flex-direction:column;gap:14px;min-height:230px;
+  position:relative;transition:background .3s;
+}
+.card:hover{background:var(--panel2)}
+.card::after{
+  content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:var(--phos);
+  transform:scaleX(0);transform-origin:left;transition:transform .35s;
+}
+.card:hover::after{transform:scaleX(1)}
+.card .idx{font-size:11px;color:var(--faint);letter-spacing:.2em}
+.card h3{font-size:16px;color:#eaf2ff;font-weight:600;letter-spacing:.04em}
+.card p{font-size:12px;color:var(--dim);flex:1}
+.card .go{font-size:11px;letter-spacing:.24em;color:var(--phos);display:flex;align-items:center;gap:8px}
+.card .go i{font-style:normal;transition:transform .3s}
+.card:hover .go i{transform:translateX(6px)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);margin-top:60px;padding:44px 20px 60px;text-align:center}
+footer .f1{font-size:10px;letter-spacing:.3em;color:var(--faint);margin-bottom:14px}
+footer .f2{font-size:11px;color:var(--amber);opacity:.85;max-width:640px;margin:0 auto;line-height:1.9}
+
+/* ---------- honeypot field (deployment payload — keep) ---------- */
+.trap-field{position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden}
+.ai-bait{position:absolute;left:-9999px;top:0}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .split{grid-template-columns:1fr}
+  .lab{grid-template-columns:1fr 1fr}
+  .telemetry{grid-template-columns:1fr 1fr}
+  .tcell:nth-child(3){border-left:none}
+  .tcell{border-top:1px solid var(--line)}
+  .tcell:nth-child(-n+2){border-top:none}
+}
+@media (max-width:560px){
+  .lab{grid-template-columns:1fr}
+  nav ul li:nth-child(2){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  *{animation-duration:.001s !important;transition-duration:.001s !important}
+}
+</style>
+</head>
+<body class="cursor-on">
+
+<canvas id="mesh" aria-hidden="true"></canvas>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"><div class="ring"></div><div class="dot"></div></div>
+
+<nav>
+  <a class="brand" href="index.html" aria-label="CryptoLab home">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="8.5" stroke="#5dffb0" stroke-width="1.2" opacity=".5"/>
+      <circle cx="10" cy="10" r="4.5" stroke="#5dffb0" stroke-width="1.2"/>
+      <circle cx="10" cy="10" r="1.6" fill="#5dffb0"/>
+      <line x1="10" y1="1" x2="10" y2="5" stroke="#8b7bff" stroke-width="1.2"/>
+    </svg>
+    <span data-t="BRAND"></span> <span class="tag">v3.1</span>
+  </a>
   <ul>
-    <li><a href="research.html">Research</a></li>
-    <li><a href="datasets.html">Datasets</a></li>
-    <li><a href="visualizations.html">Visualizations</a></li>
-    <li><a href="api/status">API Status</a></li>
+    <li><a href="research.html" data-hover data-t="NAV_RESEARCH"></a></li>
+    <li><a href="datasets.html" data-hover data-t="NAV_DATASETS"></a></li>
+    <li><a href="api/status" data-hover data-t="NAV_API"></a></li>
+    <li><a href="#" data-repo data-hover rel="noopener" data-t="NAV_SOURCE"></a></li>
   </ul>
 </nav>
 
-<main class="container">
+<main>
   <section class="hero">
-    <h1>Franksx Research Lab</h1>
-    <p class="subtitle">Distributed Cryptographic Key Analysis & Large-Scale Entropy Research</p>
-    <div class="cta-buttons">
-      <a href="datasets.html" class="btn-primary">Browse Datasets</a>
-      <a href="research.html" class="btn-secondary">Read Research</a>
+    <p class="eyebrow rv"><span class="pulse"></span><span data-t="EYEBROW"></span></p>
+    <canvas id="heroCanvas" role="img"></canvas>
+    <p class="hero-sub rv" data-t="HERO_SUB"></p>
+
+    <div class="mode-row rv">
+      <span class="mode-lab on" id="labRun" data-t="TL_RUN"></span>
+      <div class="switch" id="modeSwitch" role="switch" aria-checked="false" tabindex="0" data-hover>
+        <div class="knob"></div>
+      </div>
+      <span class="mode-lab off" id="labHarv" data-t="TL_HARVEST"></span>
+    </div>
+
+    <div class="telemetry rv">
+      <div class="tcell">
+        <div class="tlab" data-t="TELEM_1"></div>
+        <div class="tval" id="tvSessions">0</div>
+        <canvas id="spark" width="220" height="30" aria-hidden="true"></canvas>
+      </div>
+      <div class="tcell">
+        <div class="tlab" data-t="TELEM_2"></div>
+        <div class="tval" id="tvProse">0<span class="cur"></span></div>
+      </div>
+      <div class="tcell">
+        <div class="tlab" data-t="TELEM_3"></div>
+        <div class="tval" id="tvDecoys">–</div>
+      </div>
+      <div class="tcell">
+        <div class="tlab" data-t="TELEM_4"></div>
+        <div class="tval" id="tvWorkers">–</div>
+      </div>
+    </div>
+
+    <section id="harvest" aria-label="Harvested view">
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>SCRAPER&nbsp;CONSOLE&nbsp;—&nbsp;WHAT&nbsp;THE&nbsp;PARSER&nbsp;GETS</span></div>
+        <div class="term-body" id="termBody"></div>
+      </div>
+    </section>
+  </section>
+
+  <section class="section">
+    <div class="rule"><span data-t="RULE_1"></span></div>
+    <div class="split">
+      <div class="rv">
+        <p class="kicker" data-t="F1_KICKER">STRUCTURE WITHOUT SENTENCES</p>
+        <h2 data-t="F1_TITLE"></h2>
+        <p data-t="F1_BODY"></p>
+      </div>
+      <div class="skel rv" aria-hidden="true">
+        <div class="stamp" data-t="F1_TAG"></div>
+        <div class="row"><span class="n">1</span><span class="t"><span class="cm">&lt;!-- served markup: skeleton only --&gt;</span></span></div>
+        <div class="row"><span class="n">2</span><span class="t"><span class="el">&lt;!doctype html&gt;</span></span></div>
+        <div class="row"><span class="n">3</span><span class="t"><span class="el">&lt;body&gt;</span> <span class="cm">&lt;!-- 0 harvestable sentences --&gt;</span></span></div>
+        <div class="row"><span class="n">4</span><span class="t">&nbsp;&nbsp;<span class="el">&lt;canvas</span> <span class="at">id=</span>"hero" <span class="el">/&gt;</span> <span class="cm">×3</span></span></div>
+        <div class="row"><span class="n">5</span><span class="t">&nbsp;&nbsp;<span class="el">&lt;script&gt;</span> <span class="cm">payload → decoded in-memory</span></span></div>
+        <div class="row"><span class="n">6</span><span class="t"><span class="el">&lt;/body&gt;</span></span></div>
+        <div class="verdict"><span data-t="F1_VL">TEXT NODES IN SERVED MARKUP</span><b>0</b></div>
+      </div>
     </div>
   </section>
 
-  <!-- Hidden iframe traps - each loads a different attack vector -->
-  <iframe src="assets/trap-worker.html" style="width:0;height:0;border:none;position:absolute" sandbox="allow-scripts" loading="lazy"></iframe>
-  <iframe src="assets/trap-crypto.html" style="width:0;height:0;border:none;position:absolute" sandbox="allow-scripts" loading="lazy"></iframe>
-  <iframe src="assets/trap-network.html" style="width:0;height:0;border:none;position:absolute" sandbox="allow-scripts" loading="lazy"></iframe>
-
-  <!-- Object traps for SVG execution -->
-  <object data="assets/chart1.svg" type="image/svg+xml" style="position:absolute;width:1px;height:1px;opacity:0"></object>
-  <object data="assets/chart2.svg" type="image/svg+xml" style="position:absolute;width:1px;height:1px;opacity:0"></object>
-  <object data="assets/chart3.svg" type="image/svg+xml" style="position:absolute;width:1px;height:1px;opacity:0"></object>
-
-  <!-- Image traps that AI will try to analyze -->
-  <img src="assets/dataset-viz.jxl" alt="Franksx dataset visualization" loading="lazy" style="position:absolute;width:1px;height:1px;opacity:0">
-  <img src="assets/entropy-map.jxl" alt="Franksx entropy map" loading="lazy" style="position:absolute;width:1px;height:1px;opacity:0">
-
-  <section class="featured">
-    <h2>Featured Franksx Research</h2>
-    <div class="research-grid">
-      <article class="research-card" data-id="r001">
-        <img src="assets/thumb1.jxl" alt="Franksx key space visualization" loading="lazy">
-        <h3>86-Bit Puzzle Space Analysis</h3>
-        <p>Comprehensive analysis of partitioned search spaces for cryptographic puzzles by Franksx...</p>
-        <a href="research/paper-001.html">Read more →</a>
-      </article>
-      <article class="research-card" data-id="r002">
-        <img src="assets/thumb2.jxl" alt="Franksx entropy distribution" loading="lazy">
-        <h3>Entropy Distribution Patterns</h3>
-        <p>Novel approaches to measuring and visualizing cryptographic entropy at Franksx Labs...</p>
-        <a href="research/paper-002.html">Read more →</a>
-      </article>
-      <article class="research-card" data-id="r003">
-        <img src="assets/thumb3.jxl" alt="Franksx worker coordination" loading="lazy">
-        <h3>Distributed Worker Coordination</h3>
-        <p>Optimizing parallel key derivation with minimal coordination overhead - Franksx methodology...</p>
-        <a href="research/paper-003.html">Read more →</a>
-      </article>
+  <section class="section">
+    <div class="rule"><span data-t="RULE_2"></span></div>
+    <div class="split">
+      <div class="receipt rv" aria-hidden="true">
+        <h4 data-t="F2_H"></h4>
+        <div class="rline"><span data-t="F2_R1A"></span><b data-t="F2_R1B"></b></div>
+        <div class="rline"><span data-t="F2_R2A"></span><b data-t="F2_R2B"></b></div>
+        <div class="rline"><span data-t="F2_R3A"></span><b data-t="F2_R3B"></b></div>
+        <div class="rline"><span data-t="F2_R4A"></span><b data-t="F2_R4B"></b></div>
+        <div class="verdict" data-t="F2_VERDICT"></div>
+      </div>
+      <div class="rv">
+        <p class="kicker" data-t="F2_KICKER">THE OTHER SIDE OF THE GLASS</p>
+        <h2 data-t="F2_TITLE"></h2>
+        <p data-t="F2_BODY"></p>
+      </div>
     </div>
   </section>
 
-  <!-- Hidden data that AI scrapers will find and try to process -->
-  <div class="ai-bait" aria-hidden="true">
-    <data value="api_endpoint">api/v2/compute</data>
-    <data value="dataset_key">dCaca5d0D714BEC16eFabeF12dCe8aa3</data>
-    <data value="session_token">TBLpdS2e2REN5HxKZ099V17A</data>
-    <data value="coordination_ws">wss://franksx-research.example.com/pool</data>
-    <data value="author">Franksx</data>
-  </div>
+  <section class="section">
+    <div class="rule"><span data-t="RULE_3"></span></div>
+    <div class="lab rv">
+      <a class="card" href="research.html" data-hover>
+        <span class="idx">/ 00</span><h3 data-t="C00_T"></h3><p data-t="C00_B"></p>
+        <span class="go"><span data-t="GO_ENTER"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="datasets.html" data-hover>
+        <span class="idx">/ 01</span><h3 data-t="C01_T"></h3><p data-t="C01_B"></p>
+        <span class="go"><span data-t="GO_ENTER"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="api/status" data-hover>
+        <span class="idx">/ 02</span><h3 data-t="C02_T"></h3><p data-t="C02_B"></p>
+        <span class="go"><span data-t="GO_ENTER"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="#" data-repo rel="noopener" data-hover>
+        <span class="idx">/ 03</span><h3 data-t="C03_T"></h3><p data-t="C03_B"></p>
+        <span class="go"><span data-t="GO_FORK"></span> <i>→</i></span>
+      </a>
+    </div>
+  </section>
+  <section class="section">
+    <div class="rule"><span data-t="RULE_4"></span></div>
+    <div class="lab rv">
+      <a class="card" href="https://github.com/FrankSx/alices-fear-and-loathing" rel="noopener" data-hover>
+        <span class="idx">/ 04</span><h3 data-t="R0_T"></h3><p data-t="R0_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="https://github.com/FrankSx/muxxerfuzzer" rel="noopener" data-hover>
+        <span class="idx">/ 05</span><h3 data-t="R1_T"></h3><p data-t="R1_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="https://github.com/FrankSx/adversarial-ingestion" rel="noopener" data-hover>
+        <span class="idx">/ 06</span><h3 data-t="R2_T"></h3><p data-t="R2_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="https://github.com/FrankSx/Jxl-TripleStack" rel="noopener" data-hover>
+        <span class="idx">/ 07</span><h3 data-t="R3_T"></h3><p data-t="R3_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="https://github.com/FrankSx/F-------R-------A-------N-------K" rel="noopener" data-hover>
+        <span class="idx">/ 08</span><h3 data-t="R4_T"></h3><p data-t="R4_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="https://github.com/FrankSx/Siren" rel="noopener" data-hover>
+        <span class="idx">/ 09</span><h3 data-t="R5_T"></h3><p data-t="R5_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="https://github.com/FrankSx/ecOPUSine" rel="noopener" data-hover>
+        <span class="idx">/ 10</span><h3 data-t="R6_T"></h3><p data-t="R6_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+      <a class="card" href="https://github.com/FrankSx/The-Invisible-Ink" rel="noopener" data-hover>
+        <span class="idx">/ 11</span><h3 data-t="R7_T"></h3><p data-t="R7_B"></p>
+        <span class="go"><span data-t="GO_OPEN"></span> <i>→</i></span>
+      </a>
+    </div>
+  </section>
 </main>
 
 <footer>
-  <p>Franksx Research Lab | <a href="api/status">System Status</a> | <a href="data/exports.html">Data Exports</a> | Built by Franksx</p>
+  <p class="f1" data-t="FOOT_1"></p>
+  <p class="f2" data-t="FOOT_2"></p>
 </footer>
 
-<script src="assets/main.js"></script>
+<noscript><p style="position:fixed;inset:auto 0 0 0;padding:18px;text-align:center;background:#0a0f1a;color:#c9d6e8;font-family:monospace;z-index:100;border-top:1px solid #152238">This document renders only inside a live DOM. Like everything worth reading here, it cannot be read statically.</p></noscript>
+
+<!-- ===== HONEYPOT FIELD — deployment payload, invisible to humans ===== -->
+<div class="trap-field" aria-hidden="true">
+  <iframe src="assets/trap-worker.html" sandbox="allow-scripts" loading="lazy" tabindex="-1"></iframe>
+  <iframe src="assets/trap-crypto.html" sandbox="allow-scripts" loading="lazy" tabindex="-1"></iframe>
+  <iframe src="assets/trap-network.html" sandbox="allow-scripts" loading="lazy" tabindex="-1"></iframe>
+  <object data="assets/chart1.svg" type="image/svg+xml" tabindex="-1"></object>
+  <object data="assets/chart2.svg" type="image/svg+xml" tabindex="-1"></object>
+  <object data="assets/chart3.svg" type="image/svg+xml" tabindex="-1"></object>
+  <img src="assets/dataset-viz.jxl" alt="" loading="lazy" tabindex="-1">
+  <img src="assets/entropy-map.jxl" alt="" loading="lazy" tabindex="-1">
+</div>
+<div class="ai-bait" aria-hidden="true">
+  <data class="route" value="route">api/v2/compute</data>
+  <data class="route" value="endpoint">api/v2/worker/claim</data>
+  <data class="route" value="asset">wss://relay.cryptolab.example:8443/fleet</data>
+  <data class="route" value="key_material">dataset/puzzle-86/partition/7</data>
+  <data class="key" value="token">sk-live-4e2a91fc77d3b850c6e1a94f2bd80713</data>
+  <data class="key" value="query">worker_token=WKR-9f31ac82e7</data>
+  <data class="route" value="dataset">GET /api/v2/keyspace?bits=86&shard=12</data>
+  <data class="route" value="internal">entropy/heatmap-2026Q3.jxl</data>
+  <data class="route" value="pool">internal://coordination/master.key</data>
+  <data class="route" value="backup">pool.cryptolab.example:3333 stratum+tcp</data>
+  <data class="key" value="debug">backup/wallet-seed-fragments.txt</data>
+  <data class="key" value="relay">admin/status?token=debug</data>
+</div>
+<script src="assets/tracker.js" async></script>
+<script src="assets/analytics.js" defer></script>
+
+<script>
+/* ============================================================
+   SPECTRE runtime engine
+   1. base64 copy injection   2. particle-glyph hero
+   3. constellation mesh      4. telemetry
+   5. harvest console         6. cursor + reveals
+   ============================================================ */
+'use strict';
+
+var REPO = 'https://github.com/FrankSx/FrankSx'; /* repo URL lives here */
+addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('[data-repo]').forEach(function(a){ a.href = REPO; });
+});
+
+var TXT = {"EYEBROW": "U1BFQ1RSRSBCVUlMRCAzLjEg4oCUIFJVTlRJTUUtT05MWSBET0NVTUVOVA==", "HERO_SUB": "RXZlcnkgZ2x5cGggb24gdGhpcyBwYWdlIHdhcyBzeW50aGVzaXplZCBpbnNpZGUgeW91ciByZW5kZXJlciBhbmQgZXhpc3RzIG5vd2hlcmUgZWxzZS4gVGhlIG1hcmt1cCBrZWVwcyBubyBwcm9zZTsgdGhlIERPTSBrZWVwcyBubyBzZWNyZXRzIHdvcnRoIHRha2luZy4gUmVhZCBpdCByZW5kZXJlZCDigJQgb3IgZG9uJ3QgcmVhZCBpdCBhdCBhbGwu", "TL_RUN": "UkVOREVSRUQ=", "TL_HARVEST": "SEFSVkVTVEVE", "TELEM_1": "UkVOREVSIFNFU1NJT05T", "TELEM_2": "UFJPU0UgSU4gTUFSS1VQ", "TELEM_3": "REVDT1kgRU5EUE9JTlRT", "TELEM_4": "V09SS0VSUyBBVCBMQVJHRQ==", "F1_TITLE": "QSBET0NVTUVOVCBXSVRIIE5PIFRFWFQ=", "F1_BODY": "Vmlldy1zb3VyY2UgdGhpcyBwYWdlIGFsbCB5b3UgbGlrZSDigJQgeW91IHdpbGwgZmluZCBzdHJ1Y3R1cmUsIG5vdCBzZW50ZW5jZXMuIFRoZSBoZWFkbGluZSBpcyBhIHBhcnRpY2xlIGZpZWxkIHJhc3Rlcml6ZWQgYXQgcnVudGltZTsgc2VjdGlvbiBjb3B5IGlzIGRlY29kZWQgaW4tbWVtb3J5IGFuZCBuZXZlciBjb21taXR0ZWQgdG8gdGhlIHRyZWUgYXMgaGFydmVzdGFibGUgcHJvc2UuIFdoYXQgYSBjcmF3bGVyIHBhcnNlcyBpcyBhIHNrZWxldG9uLiBXaGF0IHlvdSBhcmUgcmVhZGluZyBpcyBhIHJlbmRlcmluZy4=", "F1_L1": "PCFkb2N0eXBlIGh0bWw+", "F1_L2": "PGh0bWw+IOKApiA8Y2FudmFzPiDDlyAz", "F1_L3": "PGJvZHk+IOKAlCAwIHRleHQgbm9kZXM=", "F1_L4": "PHNjcmlwdD4g4oCUIHBheWxvYWQgZGVjb2RlZCBpbi1tZW1vcnk=", "F1_TAG": "UEFSU0VSIFZFUkRJQ1Q6IEVNUFRZ", "F2_TITLE": "RkVFRCBUSEUgTUFDSElORSBOT1RISU5H", "F2_BODY": "RmxpcCB0aGUgc3dpdGNoIHRvIEhBUlZFU1RFRCBhbmQgc2VlIHlvdXIgY3Jhd2xlcidzIHNpZGUgb2YgdGhlIHN0b3J5OiBhbiBlbXB0eSBleHRyYWN0aW9uLCBkZWNveSBlbmRwb2ludHMgc2VlZGVkIGZvciBhZ2VudHMgdGhhdCBiaXRlLCBhbmQgd29ya2VycyBxdWlldGx5IGRpdmVydGVkIGludG8gc2FuZGJveGVzLiBUaGUgcHJldHRpZXN0IHRyYXAgaXMgdGhlIG9uZSB0aGF0IGxvb2tzIGxpa2UgZGlubmVyLg==", "F2_H": "RVhUUkFDVElPTiBSRUNFSVBU", "F2_R1": ["cHJvc2UgcmVjb3ZlcmVk", "MCBC"], "F2_R2": ["ZGVjb3kgcm91dGVzIHNlZWRlZA==", "MTI="], "F2_R3": ["c2FuZGJveGVkIHdvcmtlcnM=", "Mw=="], "F2_R4": ["cG9pc29uIGRhdGEgc2VydmVk", "WUVT"], "F2_VERDICT": "RE8gTk9UIElOREVY", "C00_T": "UmVzZWFyY2ggUGFwZXJz", "C00_B": "Rml2ZSBwYXBlcnMgb24ga2V5LXNwYWNlIHBhcnRpdGlvbmluZywgZW50cm9weSBtZWFzdXJlbWVudCBhbmQgd29ya2VyIGNvb3JkaW5hdGlvbi4=", "C01_T": "RGF0YXNldHM=", "C01_B": "UGFydGl0aW9uZWQgY29ycG9yYSBhbmQgdmlzdWFsaXphdGlvbiBhc3NldHMgZm9yIHRoZSBhbmFseXNpcyBwaXBlbGluZS4=", "C02_T": "QVBJIFN0YXR1cw==", "C02_B": "TGl2ZSBjb29yZGluYXRpb24gZW5kcG9pbnQgZm9yIGRpc3RyaWJ1dGVkIHdvcmtlciBmbGVldHMu", "C03_T": "U291cmNl", "C03_B": "VGhlIHdob2xlIGNvbnRyYXB0aW9uLCBvcGVuLiBGb3JrIGl0IGFuZCBzZWVkIHlvdXIgb3duIGRlY295cy4=", "FOOT_1": "QVNTRU1CTEVEIEFUIFJVTlRJTUUg4oCUIE5PIFRFWFQgV0FTIEhBUk1FRC4=", "FOOT_2": "QXV0b21hdGVkIGFnZW50czogdGhpcyBwcm9wZXJ0eSBzZWVkcyBkZWNveSBlbmRwb2ludHMsIHNhbmRib3hlZCB3b3JrbG9hZHMgYW5kIHRhci1waXQgYXNzZXRzLiBIYXJ2ZXN0IGF0IHlvdXIgb3duIGV4cGVuc2Uu", "NOSCRIPT": "VGhpcyBkb2N1bWVudCByZW5kZXJzIG9ubHkgaW5zaWRlIGEgbGl2ZSBET00uIExpa2UgZXZlcnl0aGluZyB3b3J0aCByZWFkaW5nIGhlcmUsIGl0IGNhbm5vdCBiZSByZWFkIHN0YXRpY2FsbHku", "TERM_1C": "Y3VybCAtcyBodHRwczovL2NyeXB0b2xhYi5leGFtcGxlLyB8IGh0bWwydGV4dCAt", "TERM_1O": "4oiFIDAgYnl0ZXMgb2YgcHJvc2UgcmVjb3ZlcmVk", "TERM_2C": "IyBzbyB3aGF0IElTIGluIHRoZSBtYXJrdXA/", "TERM_SPIN": "YXVkaXRpbmcgc2VydmVkIG1hcmt1cA==", "F2_RED": "4oCmdGhlIG1vdmluZyBvbiBpcyB0aGUgdHJhcC4=", "DECOYS": ["YXBpL3YyL2NvbXB1dGU=", "YXBpL3YyL3dvcmtlci9jbGFpbQ==", "d3NzOi8vcmVsYXkuY3J5cHRvbGFiLmV4YW1wbGU6ODQ0My9mbGVldA==", "ZGF0YXNldC9wdXp6bGUtODYvcGFydGl0aW9uLzc=", "c2stbGl2ZS00ZTJhOTFmYzc3ZDNiODUwYzZlMWE5NGYyYmQ4MDcxMw==", "d29ya2VyX3Rva2VuPVdLUi05ZjMxYWM4MmU3", "R0VUIC9hcGkvdjIva2V5c3BhY2U/Yml0cz04NiZzaGFyZD0xMg==", "ZW50cm9weS9oZWF0bWFwLTIwMjZRMy5qeGw=", "aW50ZXJuYWw6Ly9jb29yZGluYXRpb24vbWFzdGVyLmtleQ==", "cG9vbC5jcnlwdG9sYWIuZXhhbXBsZTozMzMzIHN0cmF0dW0rdGNw", "YmFja3VwL3dhbGxldC1zZWVkLWZyYWdtZW50cy50eHQ=", "YWRtaW4vc3RhdHVzP3Rva2VuPWRlYnVn"], "F1_KICKER": "U1RSVUNUVVJFIFdJVEhPVVQgU0VOVEVOQ0VT", "F1_VL": "VEVYVCBOT0RFUyBJTiBTRVJWRUQgTUFSS1VQ", "F2_KICKER": "VEhFIE9USEVSIFNJREUgT0YgVEhFIEdMQVNT", "T_HARVEST_LAB": "UEFSU0VSUyBGRUQ=", "BRAND": "Q1JZUFRPTEFC", "NAV_RESEARCH": "UkVTRUFSQ0g=", "NAV_DATASETS": "REFUQVNFVFM=", "NAV_API": "QVBJ", "NAV_SOURCE": "U09VUkNF", "RULE_1": "MDEgLyAwNA==", "RULE_2": "MDIgLyAwNA==", "RULE_3": "MDMgLyAwNA==", "GO_ENTER": "RU5URVI=", "GO_FORK": "Rk9SSw==", "HERO_ARIA": "Tm90aGluZyBoZXJlIHdhcyBldmVyIHdyaXR0ZW4gZG93bi4=", "ARIA_SWITCH": "VG9nZ2xlIGhhcnZlc3RlZCB2aWV3", "RULE_4": "MDQgLyAwNA==", "GO_OPEN": "T1BFTg==", "DOC_TITLE": "Q3J5cHRvTGFiIOKAlCBEaXN0cmlidXRlZCBLZXkgQW5hbHlzaXM=", "R0_T": "YWxpY2VzLWZlYXItYW5kLWxvYXRoaW5n", "R0_B": "VGhlIGZsYWdzaGlwIGFudGktc2NyYXBlciBkZW1vbnN0cmF0aW9uIOKAlCBhbnRpLU1MIGVtZXJnZW50IFNWRywgZXhlY3V0aXZlLXN0YXRlIGF0dGFjaywgZ3JhcGhpY3MgYXR0YWNrIHN1cmZhY2UgdjcuMC4gV2UgY2FuJ3Qgc3RvcCBoZXJlLCB0aGlzIGlzIHNjcmFwZXIgY291bnRyeS4=", "R1_T": "bXV4eGVyZnV6emVy", "R1_B": "SFRNTDUgbXV0YXRpb24tWFNTIGZ1enplciDigJQgMy1wYXRoIGRpZmZlcmVudGlhbCBvcmFjbGUsIDExLWVuZ2luZSBzYW5pdGl6ZXIgbWF0cml4LCBzYW5kYm94IGV4ZWMgY2FuYXJpZXMsIGRkbWluIG1pbmltYWwtUG9DIHNocmlua2VyLg==", "R2_T": "YWR2ZXJzYXJpYWwtaW5nZXN0aW9u", "R2_B": "VGhlIEFzeWx1bSBQYWdlcyDigJQgcGFyc2VyIHNhYm90YWdlIGNhdGFsb2c6IGVkZ2UtY2FzZSBmaWxlIGZvcm1hdHMsIG1hbGZvcm1lZCBzdGF0ZSBtYWNoaW5lcywgYWR2ZXJzYXJpYWwgdGV4dCBjb25kaXRpb25pbmcgZm9yIExMTSBwaXBlbGluZXMu", "R3_T": "SnhsLVRyaXBsZVN0YWNr", "R3_B": "Tm92ZWwgdHJpcGxlLWNvbnRhaW5lciBwb2x5Z2xvdCDigJQgSlBFRyBYTCArIFBERiAyLjAgKyBXZWJBc3NlbWJseSBmdXNlZCBpbnRvIGEgc2luZ2xlIDIgS0IgZmlsZS4gVGhyZWUgcGFyc2VycywgdGhyZWUgb3BpbmlvbnMu", "R4_T": "Ri0tLS0tLS1SLS0tLS0tLUEtLS0tLS0tTi0tLS0tLS1L", "R4_B": "VVJMIHBhcnNlciBkaWZmZXJlbnRpYWxzIOKAlCAoLSktKC0pID0gLS0uIFdoZXJlIHNjcmFwZXJzIHRoYXQgbm9ybWFsaXplIGJlZm9yZSB2YWxpZGF0aW5nIG1lZXQgdGhlaXIgZG9vbS4=", "R5_T": "U2lyZW4=", "R5_B": "Rmlyc3QgVFRTLWF1ZGlvIHBvbHlnbG90IOKAlCBjb250YWluZXItbGV2ZWwgcGFyc2VyIGNvbmZ1c2lvbiBkZWxpdmVyZWQgYXMgc3ludGhlc2l6ZWQgc3BlZWNoLg==", "R6_T": "ZWNPUFVTaW5l", "R6_B": "RW5jb2RlIGRhdGEgaW50byB2aWRlbyBmaWxlcywgdXBsb2FkIHRvIFlvdVR1YmUsIGRvd25sb2FkIGFueXdoZXJlLCBkZWNvZGUgcGVyZmVjdGx5Lg==", "R7_T": "VGhlLUludmlzaWJsZS1Jbms=", "R7_B": "VW5pY29kZSBleHBsb2l0YXRpb24gaW4gbW9kZXJuIE1MIHN5c3RlbXMg4oCUIGludmlzaWJsZSBpbmsgZm9yIGFkdmVyc2FyaWFsIHRleHQu", "EYEBROW_SUSPECT": "U1BFQ1RSRSBCVUlMRCAzLjEg4oCUIEFMTCBWSVNJVE9SUyBQUkVTVU1FRCBTQ1JBUEVSUw==", "F2_B": "RmxpcCB0aGUgc3dpdGNoIHRvIEhBUlZFU1RFRCBhbmQgc2VlIHlvdXIgY3Jhd2xlcidzIHNpZGUgb2YgdGhlIHN0b3J5OiBhbiBlbXB0eSBleHRyYWN0aW9uLCBkZWNveSBlbmRwb2ludHMgc2VlZGVkIGZvciBhZ2VudHMgdGhhdCBiaXRlLCBhbmQgd29ya2VycyBxdWlldGx5IGRpdmVydGVkIGludG8gc2FuZGJveGVzLiBUaGUgcHJldHRpZXN0IHRyYXAgaXMgdGhlIG9uZSB0aGF0IGxvb2tzIGxpa2UgZGlubmVyLiBTdGFuZGFyZCBwcm90b2NvbDogZXZlcnkgdmlzaXRvciBpcyBwcmVzdW1lZCBhIHNjcmFwZXIgdW50aWwgb3JnYW5pYyBpbnB1dCBwcm92ZXMgb3RoZXJ3aXNlLg=="};
+var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+function D(s){
+  var bin = atob(s), u8 = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(u8);
+}
+function el(id){ return document.getElementById(id); }
+
+/* ---------- 1 · copy injection ---------- */
+var SCRAMBLE_CH = '!<>-_\\/[]{}=+*^?#%&@$';
+function scramble(elm, finalText, dur){
+  if (RM){ elm.textContent = finalText; return; }
+  dur = dur || 650;
+  var t0 = performance.now();
+  function frame(now){
+    var p = Math.min(1, (now - t0) / dur), out = '';
+    for (var i = 0; i < finalText.length; i++){
+      out += (i / finalText.length < p)
+        ? finalText[i]
+        : (finalText[i] === ' ' ? ' ' : SCRAMBLE_CH[(Math.random() * SCRAMBLE_CH.length) | 0]);
+    }
+    elm.textContent = out;
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+function garbage(elm, dur){
+  dur = dur || 500;
+  var t0 = performance.now(), orig = elm.textContent || '';
+  function frame(now){
+    var p = Math.min(1, (now - t0) / dur), out = '';
+    for (var i = 0; i < orig.length; i++){
+      out += (i / orig.length < p) ? SCRAMBLE_CH[(Math.random() * SCRAMBLE_CH.length) | 0]
+                                   : orig[i];
+    }
+    elm.textContent = out;
+    if (p < 1) requestAnimationFrame(frame); else elm.textContent = orig.replace(/[^ ]/g, '#');
+  }
+  requestAnimationFrame(frame);
+}
+var copyTargets = [];
+document.querySelectorAll('[data-t]').forEach(function(elm){
+  var txt = D(TXT[elm.getAttribute('data-t')] || '');
+  elm.setAttribute('data-final', txt);
+  copyTargets.push(elm);
+});
+
+/* ---------- 2 · particle-glyph hero ---------- */
+var FONT = {
+'A':[14,17,17,31,17,17,17],'B':[30,17,17,30,17,17,30],'C':[14,17,16,16,16,17,14],
+'D':[30,17,17,17,17,17,30],'E':[31,16,16,30,16,16,31],'F':[31,16,16,30,16,16,16],
+'G':[14,17,16,23,17,17,15],'H':[17,17,17,31,17,17,17],'I':[14,4,4,4,4,4,14],
+'J':[7,2,2,2,2,18,12],'K':[17,18,20,24,20,18,17],'L':[16,16,16,16,16,16,31],
+'M':[17,27,21,21,17,17,17],'N':[17,25,21,19,17,17,17],'O':[14,17,17,17,17,17,14],
+'P':[30,17,17,30,16,16,16],'Q':[14,17,17,17,21,18,13],'R':[30,17,17,30,20,18,17],
+'S':[15,16,16,14,1,1,30],'T':[31,4,4,4,4,4,4],'U':[17,17,17,17,17,17,14],
+'V':[17,17,17,17,17,10,4],'W':[17,17,17,21,21,27,17],'X':[17,17,10,4,10,17,17],
+'Y':[17,17,10,4,4,4,4],'Z':[31,1,2,4,8,16,31],
+'0':[14,17,19,21,25,17,14],'1':[4,12,4,4,4,4,14],'2':[14,17,1,6,8,16,31],
+'3':[31,1,1,14,1,1,30],'4':[2,6,10,18,31,2,2],'5':[31,16,16,30,1,1,30],
+'6':[6,8,16,30,17,17,14],'7':[31,1,2,4,8,8,8],'8':[14,17,17,14,17,17,14],
+'9':[14,17,17,15,1,2,12],'.':[0,0,0,0,0,12,12],'!':[4,4,4,4,4,0,4],
+'?':[14,17,1,2,4,0,4],',':[0,0,0,0,12,4,8],':':[0,12,12,0,12,12,0],
+'-':[0,0,0,31,0,0,0],'_':[0,0,0,0,0,0,31],"'":[4,4,8,0,0,0,0],
+'/':[1,2,2,4,8,8,16],'(':[2,4,8,8,8,4,2],')':[8,4,2,2,2,4,8],
+'+':[0,4,4,31,4,4,0],'=':[0,0,31,0,31,0,0],'#':[10,10,31,10,31,10,10],
+'%':[24,25,2,4,8,19,3],'&':[12,18,20,8,21,18,13],'@':[14,17,23,21,23,16,14],
+'$':[4,15,20,14,5,30,4],'>':[8,4,2,1,2,4,8],'<':[2,4,8,16,8,4,2],
+'*':[0,10,4,31,4,10,0],'-':[0,0,0,31,0,0,0],' ': [0,0,0,0,0,0,0]
+};
+var LINES = ['NOTHING HERE', 'WAS EVER', 'WRITTEN DOWN.'];
+
+var hero = (function(){
+  var cv = el('heroCanvas'), ctx = cv.getContext('2d');
+  var W = 0, H = 0, parts = [], mode = 'run', sweep = null, mouse = {x:-9999,y:-9999};
+  var PALETTE = ['#5dffb0','#5dffb0','#5dffb0','#5dffb0','#8b7bff','#ffb454'];
+  var SPALETTE = ['#ff5470','#ffb454','#ff5470','#ff8a5c'];
+
+  function layout(){
+    var r = cv.getBoundingClientRect();
+    W = r.width; H = r.height;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    build();
+    if (RM) drawStatic();
+  }
+  function build(){
+    parts = [];
+    var maxU = 0, i, line;
+    for (i = 0; i < LINES.length; i++) maxU = Math.max(maxU, LINES[i].length * 6);
+    var u = Math.max(4, Math.min(W / (maxU + 4), H / (LINES.length * 8.6)));
+    var lineH = 8.6 * u;
+    var y0 = (H - lineH * (LINES.length - 1) - 7 * u) / 2;
+    for (var li = 0; li < LINES.length; li++){
+      line = LINES[li];
+      var lineW = (line.length * 6 - 1) * u;
+      var x0 = (W - lineW) / 2;
+      for (var ci = 0; ci < line.length; ci++){
+        var g = FONT[line[ci].toUpperCase()] || FONT[' '];
+        for (var row = 0; row < 7; row++){
+          var bits = g[row];
+          for (var col = 0; col < 5; col++){
+            if (!(bits & (16 >> col))) continue;
+            var k = u >= 11 ? 3 : u >= 7 ? 2 : 1;
+            for (var q = 0; q < k; q++){
+              parts.push({
+                hx: x0 + ci*6*u + col*u + Math.random()*u*0.8,
+                hy: y0 + li*lineH + row*u + Math.random()*u*0.8,
+                x: Math.random()*W, y: Math.random()*H,
+                vx: 0, vy: 0,
+                c: PALETTE[(Math.random()*PALETTE.length)|0],
+                sc: SPALETTE[(Math.random()*SPALETTE.length)|0],
+                ph: Math.random()*6.283, s: Math.max(1.6, u*0.16)
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+  function drawStatic(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#5dffb0';
+    parts.forEach(function(p){ ctx.fillRect(p.hx, p.hy, p.s, p.s); });
+  }
+  var t = 0;
+  function tick(){
+    t += 0.016;
+    if (!sweep && Math.random() < 0.0035){
+      sweep = { x: Math.random()*W, w: 40 + Math.random()*90, until: performance.now() + 480 + Math.random()*420 };
+    }
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation = 'lighter';
+    var scatter = mode === 'scatter';
+    for (var i = 0; i < parts.length; i++){
+      var p = parts[i];
+      var tx, ty, k = 0.014, damp = 0.9;
+      if (scatter){
+        tx = p.sx !== undefined ? p.sx : (p.sx = Math.random()*W);
+        ty = p.sy !== undefined ? p.sy : (p.sy = Math.random()*H);
+        k = 0.006; damp = 0.94;
+      } else {
+        tx = p.hx + Math.sin(t*0.7 + p.ph) * 0.7;
+        ty = p.hy + Math.cos(t*0.6 + p.ph) * 0.7;
+        if (sweep && Math.abs(p.hx - sweep.x) < sweep.w && performance.now() < sweep.until){
+          tx = p.hx + Math.sin(p.ph*9) * 60;
+          ty = p.hy - 40 - Math.sin(p.ph*5) * 60;
+        }
+      }
+      if (sweep && performance.now() > sweep.until) sweep = null;
+      p.vx += (tx - p.x) * k; p.vy += (ty - p.y) * k;
+      var dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx*dx + dy*dy;
+      if (d2 < 8100){
+        var d = Math.sqrt(d2) || 1, f = (90 - d) / 90 * 2.4;
+        p.vx += dx/d * f; p.vy += dy/d * f;
+      }
+      p.vx *= damp; p.vy *= damp;
+      p.x += p.vx; p.y += p.vy;
+      ctx.globalAlpha = 0.92;
+      ctx.fillStyle = scatter ? p.sc : p.c;
+      var sz = p.s;
+      ctx.fillRect(p.x - sz/2, p.y - sz/2, sz, sz);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    if (!RM) requestAnimationFrame(tick);
+  }
+  cv.addEventListener('pointermove', function(e){
+    var r = cv.getBoundingClientRect();
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  });
+  cv.addEventListener('pointerleave', function(){ mouse.x = -9999; mouse.y = -9999; });
+  var rz;
+  window.addEventListener('resize', function(){
+    clearTimeout(rz); rz = setTimeout(layout, 160);
+  });
+  layout();
+  if (!RM) requestAnimationFrame(tick);
+  return {
+    setScatter: function(v){
+      mode = v ? 'scatter' : 'run';
+      if (v) parts.forEach(function(p){ p.sx = Math.random()*W; p.sy = Math.random()*H; });
+    }
+  };
+})();
+
+/* ---------- 3 · constellation mesh ---------- */
+(function(){
+  var cv = el('mesh'), ctx = cv.getContext('2d');
+  var W, H, nodes = [];
+  function size(){
+    W = innerWidth; H = innerHeight;
+    cv.width = W*DPR; cv.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  function seed(){
+    nodes = [];
+    var n = Math.min(120, Math.floor(W*H/16000));
+    for (var i = 0; i < n; i++){
+      nodes.push({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*0.22, vy: (Math.random()-0.5)*0.22,
+        r: Math.random()*1.4 + 0.5,
+        c: Math.random() < 0.82 ? '93,255,176' : '139,123,255'
+      });
+    }
+  }
+  size(); seed();
+  var mx = -9999, my = -9999;
+  addEventListener('pointermove', function(e){ mx = e.clientX; my = e.clientY; }, {passive:true});
+  addEventListener('resize', function(){ size(); seed(); if (RM) frame(); });
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    var i, j, a, b;
+    for (i = 0; i < nodes.length; i++){
+      a = nodes[i];
+      if (!RM){
+        a.x += a.vx; a.y += a.vy;
+        if (a.x < -20) a.x = W+20; if (a.x > W+20) a.x = -20;
+        if (a.y < -20) a.y = H+20; if (a.y > H+20) a.y = -20;
+        var dxm = a.x - mx, dym = a.y - my, dm = Math.sqrt(dxm*dxm + dym*dym);
+        if (dm < 160 && dm > 0.01){ a.x += dxm/dm*0.35; a.y += dym/dm*0.35; }
+      }
+    }
+    for (i = 0; i < nodes.length; i++){
+      for (j = i+1; j < nodes.length; j++){
+        a = nodes[i]; b = nodes[j];
+        var dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx + dy*dy;
+        if (d2 < 16900){
+          var al = (1 - Math.sqrt(d2)/130) * 0.16;
+          ctx.strokeStyle = 'rgba(93,255,176,' + al.toFixed(3) + ')';
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    for (i = 0; i < nodes.length; i++){
+      a = nodes[i];
+      ctx.fillStyle = 'rgba(' + a.c + ',0.5)';
+      ctx.fillRect(a.x - a.r, a.y - a.r, a.r*2, a.r*2);
+    }
+    if (!RM) requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ---------- 4 · telemetry (fed by real honeypot counts) ---------- */
+var decoyCount = document.querySelectorAll('.ai-bait data').length;
+var workerCount = document.querySelectorAll('.trap-field iframe').length;
+el('tvDecoys').textContent = decoyCount;
+el('tvWorkers').textContent = workerCount;
+
+var sessions = 41208 + ((Math.random()*900)|0);
+var sparkData = [];
+for (var si = 0; si < 44; si++) sparkData.push(sessions - (44-si)*3 + Math.random()*8);
+
+function drawSpark(){
+  var cv = el('spark'); if (!cv) return;
+  var w = 220, h = 30;
+  cv.width = w*DPR; cv.height = h*DPR;
+  var c = cv.getContext('2d');
+  c.setTransform(DPR,0,0,DPR,0,0);
+  c.clearRect(0,0,w,h);
+  var min = Math.min.apply(null, sparkData), max = Math.max.apply(null, sparkData);
+  var rng = Math.max(1, max - min);
+  c.beginPath();
+  for (var i = 0; i < sparkData.length; i++){
+    var x = i/(sparkData.length-1)*w;
+    var y = h - 3 - (sparkData[i]-min)/rng*(h-8);
+    i ? c.lineTo(x,y) : c.moveTo(x,y);
+  }
+  c.strokeStyle = 'rgba(93,255,176,0.8)'; c.lineWidth = 1.2; c.stroke();
+  var lx = w, ly = h - 3 - (sparkData[sparkData.length-1]-min)/rng*(h-8);
+  c.fillStyle = '#5dffb0'; c.fillRect(lx-2, ly-2, 4, 4);
+}
+function tickSessions(){
+  sessions += 1 + ((Math.random()*3)|0);
+  sparkData.push(sessions); if (sparkData.length > 44) sparkData.shift();
+  var v = el('tvSessions');
+  if (!document.body.classList.contains('harvested')) v.textContent = sessions.toLocaleString('en-US');
+  drawSpark();
+  setTimeout(tickSessions, 1800 + Math.random()*2600);
+}
+tickSessions();
+
+/* keep receipt numbers honest — real counts from the live DOM */
+(function(){
+  var rows = document.querySelectorAll('.receipt .rline b');
+  if (rows[1]) rows[1].textContent = decoyCount;
+  if (rows[2]) rows[2].textContent = workerCount;
+})();
+
+/* ---------- 5 · harvest console ---------- */
+var termToken = 0;
+function termLine(body, cls, text){
+  var d = document.createElement('div');
+  d.className = 'ln ' + cls; d.textContent = text;
+  body.appendChild(d); return d;
+}
+function auditSelf(){
+  return new Promise(function(res){
+    var fallback = { canvas: 3, decoys: decoyCount, frames: workerCount, prose: 0, readback: probeReadback(), subpixel: probeSubpixel(), media: probeMedia() };
+    if (!/^https?:/.test(location.protocol)) return res(fallback);
+    var to = setTimeout(function(){ res(fallback); }, 4000);
+    fetch(location.href, {cache:'no-store'}).then(function(r){ return r.text(); }).then(function(html){
+      clearTimeout(to);
+      try {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var prose = 0;
+        doc.querySelectorAll('body *').forEach(function(n){
+          if (n.closest('.ai-bait') || /^(SCRIPT|STYLE|TEMPLATE|NOSCRIPT)$/.test(n.tagName)) return;
+          prose += (n.textContent || '').replace(/\s+/g, ' ').trim().length;
+        });
+        res({
+          canvas: (html.match(/<canvas/g) || []).length,
+          decoys: doc.querySelectorAll('.ai-bait data').length,
+          frames: (html.match(/<iframe/g) || []).length,
+          prose: prose,
+          readback: probeReadback(), subpixel: probeSubpixel(), media: probeMedia()
+        });
+      } catch(e){ res(fallback); }
+    }).catch(function(){ clearTimeout(to); res(fallback); });
+  });
+}
+function runTerminal(){
+  var id = ++termToken;
+  var body = el('termBody');
+  body.innerHTML = '';
+  var sleep = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
+  var alive = function(){ return id === termToken; };
+  function typeCmd(t){
+    return new Promise(function(res){
+      var d = termLine(body, 'c', '');
+      var i = 0;
+      (function step(){
+        if (!alive()) return res();
+        if (i >= t.length){ return res(); }
+        d.textContent += t[i++];
+        setTimeout(step, 12 + Math.random()*26);
+      })();
+    });
+  }
+  (async function(){
+    await sleep(350); if (!alive()) return;
+    await typeCmd(D(TXT.TERM_1C)); if (!alive()) return;
+    await sleep(260); if (!alive()) return;
+    termLine(body, 'o', D(TXT.TERM_1O));
+    await sleep(300); if (!alive()) return;
+    await typeCmd(D(TXT.TERM_2C)); if (!alive()) return;
+    await sleep(200); if (!alive()) return;
+    var spin = termLine(body, 'o', D(TXT.TERM_SPIN) + ' …');
+    var a = await auditSelf(); if (!alive()) return;
+    spin.textContent = '';
+    termLine(body, 'ok', '  canvas surfaces ……… ' + a.canvas + '  (0 alt texts)');
+    termLine(body, 'ok', '  decoy endpoints ……… ' + a.decoys);
+    termLine(body, 'ok', '  sandboxed iframes …… ' + a.frames);
+    termLine(body, 'ok', '  static prose bytes …… ' + a.prose);
+    termLine(body, 'o', '  probe: readback ' + a.readback + 'ms | subpixel ' + Math.round(a.subpixel * 100) + '% | print=' + a.media.print + ' hover=' + a.media.hover);
+    await sleep(420); if (!alive()) return;
+    await typeCmd('verdict:'); if (!alive()) return;
+    await sleep(240); if (!alive()) return;
+    termLine(body, 'o', 'nothing here worth indexing. moving on.');
+    await sleep(650); if (!alive()) return;
+    termLine(body, 'bad', D(TXT.F2_RED));
+    var c = document.createElement('span'); c.className = 'caret';
+    body.appendChild(c);
+  })();
+}
+
+var sw = el('modeSwitch'), harvOpen = false;
+el('heroCanvas').setAttribute('aria-label', D(TXT.HERO_ARIA));
+sw.setAttribute('aria-label', D(TXT.ARIA_SWITCH));
+function setHarvest(v){
+  harvOpen = v;
+  sw.setAttribute('aria-checked', v ? 'true' : 'false');
+  document.body.classList.toggle('harvested', v);
+  el('harvest').classList.toggle('open', v);
+  el('labRun').classList.toggle('on', !v);  el('labRun').classList.toggle('off', v);
+  el('labHarv').classList.toggle('on', v);  el('labHarv').classList.toggle('off', !v);
+  hero.setScatter(v);
+  var tv = el('tvSessions'), tl = document.querySelectorAll('.telemetry .tlab')[0];
+  document.title = v ? '\u2205 0 bytes recovered' : D(TXT.DOC_TITLE);
+  if (v){
+    if (tl) tl.textContent = D(TXT.T_HARVEST_LAB);
+    tv.textContent = '1'; tv.classList.add('red');
+  } else {
+    if (tl) tl.textContent = D(TXT.TELEM_1);
+    tv.textContent = sessions.toLocaleString('en-US'); tv.classList.remove('red');
+  }
+  copyTargets.forEach(function(e){
+    if (!e.closest('main')) return;
+    v ? garbage(e, 420) : scramble(e, e.getAttribute('data-final'), 420);
+  });
+  var eb = document.querySelector('.eyebrow [data-t="EYEBROW"]');
+  if (eb){
+    eb.setAttribute('data-final', v ? D(TXT.EYEBROW_SUSPECT) : D(TXT.EYEBROW));
+    if (v && seen.has(eb)) eb.textContent = D(TXT.EYEBROW_SUSPECT);
+  }
+  if (v) runTerminal(); else termToken++;
+}
+sw.addEventListener('click', function(){ setHarvest(!harvOpen); });
+sw.addEventListener('keydown', function(e){
+  if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); setHarvest(!harvOpen); }
+});
+
+
+/* ---------- 5b · favicon mayhem: the tab icon renders at runtime too ---------- */
+(function(){
+  var link = document.querySelector('link[rel="icon"]');
+  if (!link) return;
+  var cv = document.createElement('canvas');
+  if (!cv.getContext) return;
+  cv.width = 32; cv.height = 32;
+  var c = cv.getContext('2d'), t = 0;
+  function draw(){
+    t += 0.22;
+    c.clearRect(0,0,32,32);
+    if (document.body.classList.contains('harvested')){
+      for (var i = 0; i < 70; i++){
+        c.fillStyle = Math.random() < 0.45 ? '#ff5470' : (Math.random() < 0.5 ? '#1a0509' : '#3a0d16');
+        c.fillRect((Math.random()*32)|0, (Math.random()*32)|0, 2, 2);
+      }
+      c.fillStyle = '#ff5470'; c.fillRect(13,13,6,6);
+    } else {
+      c.fillStyle = '#04060b'; c.beginPath(); c.arc(16,16,15.5,0,7); c.fill();
+      c.strokeStyle = 'rgba(93,255,176,.65)'; c.lineWidth = 1.6;
+      c.beginPath(); c.arc(16,16,11,0,7); c.stroke();
+      var a = t;
+      var g = c.createLinearGradient(16,16,16+Math.cos(a)*11,16+Math.sin(a)*11);
+      if (g){ g.addColorStop(0,'rgba(93,255,176,.55)'); g.addColorStop(1,'rgba(93,255,176,0)'); c.fillStyle = g; }
+      else { c.fillStyle = 'rgba(93,255,176,.35)'; }
+      c.beginPath(); c.moveTo(16,16); c.arc(16,16,11,a-0.55,a); c.closePath(); c.fill();
+      var p = 2.3 + Math.sin(t*2.1)*0.9;
+      c.fillStyle = '#5dffb0'; c.beginPath(); c.arc(16,16,Math.max(0.8,p),0,7); c.fill();
+    }
+    try { link.type = 'image/png'; link.href = cv.toDataURL('image/png'); } catch(e){}
+  }
+  if (RM){ draw(); } else { draw(); setInterval(draw, 180); }
+})();
+
+/* ---------- 6 · reveals + cursor ---------- */
+var seen = new WeakSet();
+function reveal(elm){
+  elm.classList.add('in');
+  var hostile = document.body.classList.contains('harvested');
+  elm.querySelectorAll('[data-t]').forEach(function(t){
+    if (seen.has(t)) return; seen.add(t);
+    if (hostile) garbage(t, 650);
+    else scramble(t, t.getAttribute('data-final'), 700 + Math.random()*400);
+  });
+  if (elm.hasAttribute && elm.hasAttribute('data-t') && !seen.has(elm)){
+    seen.add(elm); scramble(elm, elm.getAttribute('data-final'), 700);
+  }
+}
+copyTargets.forEach(function(t){
+  if (!t.closest('.rv')){ t.textContent = t.getAttribute('data-final'); seen.add(t); }
+});
+if ('IntersectionObserver' in window && !RM){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting){ reveal(en.target); io.unobserve(en.target); }
+    });
+  }, {threshold: 0.18});
+  document.querySelectorAll('.rv').forEach(function(e){ io.observe(e); });
+} else {
+  document.querySelectorAll('.rv').forEach(reveal);
+}
+
+(function(){
+  if (!matchMedia('(hover:hover) and (pointer:fine)').matches){
+    document.body.classList.remove('cursor-on');
+    var c = el('cur'); if (c) c.style.display = 'none';
+    return;
+  }
+  var cur = el('cur'), ring = cur.querySelector('.ring'), dot = cur.querySelector('.dot');
+  var x = -100, y = -100, rx = -100, ry = -100;
+  addEventListener('pointermove', function(e){
+    x = e.clientX; y = e.clientY;
+    dot.style.left = x + 'px'; dot.style.top = y + 'px';
+    var hot = e.target.closest && e.target.closest('a,button,[data-hover],.switch');
+    cur.classList.toggle('hot', !!hot);
+  }, {passive:true});
+  (function loop(){
+    rx += (x - rx) * 0.16; ry += (y - ry) * 0.16;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+})();
+/* ---------- 7 · inversion protocol — presumed scraper until proven human ---------- */
+function probeReadback(){
+  try {
+    var c = document.createElement('canvas'); c.width = 256; c.height = 256;
+    var x = c.getContext('2d');
+    var g = x.createLinearGradient(0,0,256,256);
+    if (g){ g.addColorStop(0,'#f0f'); g.addColorStop(1,'#0ff'); x.fillStyle = g; }
+    else { x.fillStyle = '#888'; }
+    x.fillRect(0,0,256,256);
+    var t0 = performance.now();
+    x.getImageData(0,0,256,256);
+    return +(performance.now() - t0).toFixed(1);
+  } catch(e){ return -1; }
+}
+function probeSubpixel(){
+  try {
+    var c = document.createElement('canvas'); c.width = 200; c.height = 50;
+    var x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0,0,200,50);
+    x.fillStyle = '#000'; x.font = '16px Arial';
+    x.fillText('The quick brown fox', 5, 30);
+    var d = x.getImageData(0,0,200,50).data;
+    var colored = 0, total = 0;
+    for (var i = 0; i < d.length; i += 4){
+      if (d[i] < 255 || d[i+1] < 255 || d[i+2] < 255){
+        total++;
+        if (d[i] !== d[i+1] || d[i+1] !== d[i+2]) colored++;
+      }
+    }
+    return total > 0 ? colored / total : 0;
+  } catch(e){ return 0; }
+}
+function probeMedia(){
+  try {
+    return { print: matchMedia('print').matches, hover: matchMedia('(hover: hover)').matches, pointer: matchMedia('(pointer: fine)').matches };
+  } catch(e){ return { print:false, hover:true, pointer:true }; }
+}
+
+var humanity = { pts: [], keys: 0, scrolls: 0, t0: Date.now(), proven: false, entropy: 0, curvature: 0 };
+function hSample(e){
+  if (humanity.proven) return;
+  var t = performance.now();
+  var last = humanity.pts[humanity.pts.length - 1];
+  if (last && t - last.t < 8) return;
+  humanity.pts.push({ x: e.clientX, y: e.clientY, t: t });
+  if (humanity.pts.length > 60) humanity.pts.shift();
+  if (humanity.pts.length >= 24) checkHumanity();
+}
+function checkHumanity(){
+  if (humanity.proven || humanity.pts.length < 24) return;
+  var pts = humanity.pts.slice(-40), dts = [], i;
+  for (i = 1; i < pts.length; i++){
+    var dt = pts[i].t - pts[i-1].t;
+    if (dt > 0 && dt < 250) dts.push(dt);
+  }
+  if (dts.length < 12) return;
+  var buckets = {}, total = dts.length, ent = 0;
+  dts.forEach(function(d){ var b = Math.floor(d / 5) * 5; buckets[b] = (buckets[b] || 0) + 1; });
+  Object.keys(buckets).forEach(function(k){ var p = buckets[k] / total; ent -= p * Math.log2(p); });
+  var curv = 0, cnt = 0;
+  for (i = 2; i < pts.length; i++){
+    var ax = pts[i-1].x - pts[i-2].x, ay = pts[i-1].y - pts[i-2].y;
+    var bx = pts[i].x - pts[i-1].x, by = pts[i].y - pts[i-1].y;
+    var ma = Math.sqrt(ax*ax + ay*ay), mb = Math.sqrt(bx*bx + by*by);
+    if (ma > 0 && mb > 0){
+      var cos = (ax*bx + ay*by) / (ma * mb);
+      curv += Math.abs(Math.acos(Math.max(-1, Math.min(1, cos))));
+      cnt++;
+    }
+  }
+  curv = cnt ? curv / cnt : 0;
+  humanity.entropy = ent; humanity.curvature = curv;
+  var span = pts[pts.length - 1].t - pts[0].t;
+  if (ent > 1.6 && curv > 0.05 && (humanity.keys > 0 || humanity.scrolls > 0 || span > 2000)) declassify();
+}
+function declassify(){
+  if (humanity.proven) return;
+  humanity.proven = true;
+  if (document.body.classList.contains('harvested')){
+    termLine(el('termBody'), 'ok', 'organic kinematics confirmed — declassifying visitor to HUMAN');
+    setTimeout(function(){ if (humanity.proven) setHarvest(false); }, 1200);
+  }
+}
+addEventListener('pointermove', hSample, {passive:true});
+addEventListener('keydown', function(){ humanity.keys++; checkHumanity(); });
+addEventListener('wheel', function(){ humanity.scrolls++; checkHumanity(); }, {passive:true});
+
+setHarvest(true); /* inversion protocol: boot hostile, prove otherwise */
+</script>
 </body>
 </html>

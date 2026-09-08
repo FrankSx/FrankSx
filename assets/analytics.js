@@ -1,2 +1,2 @@
-// Franksx Analytics
-console.log("Franksx analytics loaded");
+// Analytics
+console.log("Analytics loaded");

