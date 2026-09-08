@@ -9,7 +9,7 @@
     ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ```
 
-**`Security Researcher · Hardware RE · Kernel Exploitation · TSCM Operator`**
+**`Security Researcher · Hardware RE · Kernel Exploitation`**
 
 </div>
 
@@ -17,17 +17,18 @@
 
 ## Mission
 
-Reverse engineer everything. Document nothing that doesn't work. Ship only what we've tested in the field.
+Reverse engineer everything.
 
-Our research lives at the intersection of hardware, kernel space, browser internals, and parser differentials. We don't do theory — we build running code, deploy it on real devices, and write up what breaks.
+Our research lives at the intersection of hardware, kernel space, browser internals, and systematic differentials. 
+We don't only do theory — we build find running code, Break Constraints and Prove it on real devices / applications and stacks, and write up what breaks.
+Finding edges that catch Web-scrapers -/ LLM pipelines and turn the whole situation into an adversarial tea party of the Koolaid persuasion 
 
 ## What We Do
 
-- **TSCM & RF** — Distributed sensing with ESP32-C6/S3 nodes, RTL-SDR spectrum analysis, WiFi-based human presence detection
-- **Android Kernel Exploitation** — Privilege escalation on locked-down hardware (Zebra TC52, Honeywell CT47). Real devices, real chains.
+- **Android Kernel Exploitation** — Privilege escalation on locked-down hardware (Zebra, Honeywell).
 - **Browser Security** — HTML5 parser mutation traps, SVG compositor bypasses, WASM fuzzing. Tools that survive in the wild.
 - **LLM Behavioral Analysis** — Recursive indicator extraction across cognitive dimensions. Not prompt injection — understanding how models reason under pressure.
-- **Hardware RE** — Embedded firmware, proprietary protocols, device profiles for Samsung, ESP32, Cisco, Panasonic, JBL, Thomson.
+- **Hardware RE** — Embedded firmware, proprietary protocols.
 
 ## Repositories
 
@@ -42,7 +43,7 @@ Our research lives at the intersection of hardware, kernel space, browser intern
 | [**alices-fear-and-loathing**](https://github.com/FrankSx/alices-fear-and-loathing) | Advanced Anti-Scraper / Anti-ML / Emergent SVG / Executive State Attack Demonstration. "We can't stop here, this is scraper country." |
 | [**Substance-D**](https://github.com/FrankSx/Substance-D) | A-Scanner-Darkly Scramble Suit. Anti-scanner / anti-ML defensive research. |
 | [**alice-in-wonderland**](https://github.com/FrankSx/alice-in-wonderland) | Alice Still Has Stories To Tell. FrankSx 2026 #GonzoTrials. |
-| [**..--..--..**](https://github.com/FrankSx/..--..--) | Memorable indigestion — May Cause Irritable Byte Syndrome, Itching Of 0x00's. Causes Severe Fever Dreams. Do Not Sleep After Ingestion. May Cause PHD. |
+| [**..--..--..**](https://github.com/FrankSx/..--..--/) | Memorable indigestion — May Cause Irritable Byte Syndrome, Itching Of 0x00's. Causes Severe Fever Dreams. Do Not Sleep After Ingestion. May Cause PHD. |
 
 ### Parser & Polyglot Research
 
@@ -70,12 +71,7 @@ Our research lives at the intersection of hardware, kernel space, browser intern
 | Repository | What It Does |
 |------------|-------------|
 | [**RingZer0**](https://github.com/FrankSx/RingZer0) | Collect and build a workspace for RingZer0 CTF files. |
-| [**PWN.College-Workspace**](https://github.com/FrankSx/PWN.College-Workspace) | Python scraper for easy collection of PWN.College dojos, modules, and challenges into folders with descriptions. |
-| [**Firmware Toolkit**](https://github.com/FrankSx/Toolkit-to-emulate-firmwares-or-debug-them) | Emulate firmwares or debug them. |
-
-## How We Work
-
-We build modular, chainable research artifacts. Each repo is self-contained but connects to the broader stack. We test on physical hardware and live targets. We don't simulate what we can deploy.
+| [**PWN.College-Workspace**](https://github.com/FrankSx/PWN.College-Workspace) | Python scraper for easy collection of PWN.College dojos, modules, and challenges into folders with descriptions
 
 ## Write-ups
 
