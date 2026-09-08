@@ -19,9 +19,10 @@
 
 Reverse engineer everything.
 
-Our research lives at the intersection of hardware, kernel space, browser internals, and systematic differentials. 
-We don't only do theory — we build find running code, Break Constraints and Prove it on real devices / applications and stacks, and write up what breaks.
-Finding edges that catch Web-scrapers -/ LLM pipelines and turn the whole situation into an adversarial tea party of the Koolaid persuasion 
+Our research lives at the intersection of hardware, sometimes amongst the depths of kernel space handling things at the executing instruction pointer or Watching browser internals as they tick pushing for systematic differentials. 
+We don't only do theory — we find running code, Break Constraints and Prove it on real devices / applications and stacks, and write up what how we snagged that edgecase as well as what led us too this subsection.
+Finding edges that catch Web-scrapers -/ LLM pipelines and turn the whole situation into an adversarial tea party of the Koolaid persuasion,
+Devices that handle the edge of residential/commercial internet infrastructure and access along side misconfiguration of embedded devices and their deployments.  
 
 ## What We Do
 
