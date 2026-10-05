@@ -1,0 +1,29 @@
+/* Franks Electric Dreams - FX v1.1 | loaded via jsDelivr/Pages */
+/* ── blinking block caret on READ MORE / jump links ── */
+.fx-caret{display:inline-block;margin-left:2px;animation:fxblink 1.05s steps(1) infinite}
+@keyframes fxblink{50%{opacity:0}}
+
+/* ── one-shot header decode (used by JS on scroll) ── */
+.fx-scrambling{color:#7CFC00}
+
+/* ── rare banner flicker: add class="fx-flicker" to the
+     header image/banner in your template if you want it ── */
+@keyframes fxflicker{
+  0%,93.9%,95.1%,100%{opacity:1;filter:none}
+  94%{opacity:.72;transform:translateX(1px);filter:hue-rotate(18deg)}
+  94.6%{opacity:.88;transform:translateX(-1px)}
+}
+.fx-flicker{animation:fxflicker 9s infinite}
+
+/* ── scanline sheen that follows the mouse over post cards ── */
+.post,.blog-posts .post-outer{position:relative}
+.post::after,.blog-posts .post-outer::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:repeating-linear-gradient(0deg,rgba(124,252,0,.045) 0 1px,transparent 1px 3px);
+  transition:opacity .25s ease;
+}
+.post:hover::after,.blog-posts .post-outer:hover::after{opacity:1}
+
+@media (prefers-reduced-motion: reduce){
+  .fx-caret,.fx-flicker{animation:none !important}
+}
