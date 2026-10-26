@@ -6,78 +6,93 @@
     █████╗  ██████╔╝███████║██╔██╗ ██║█████╔╝ ███████╗ ╚███╔╝ 
     ██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗ ╚════██║ ██╔██╗ 
     ██║     ██║  ██║██║  ██║██║ ╚████║██║  ██╗███████║██╔╝ ██╗
-    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═══╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 ```
 
-**`Security Researcher · Hardware RE · Kernel Exploitation`**
+### **Reverse Engineer · Security Researcher · CTF Player**
+
+**Hardware & Firmware · Browser & Parser Security · Adversarial Systems**
+
+[Research Blog](https://frankhacks.blogspot.com) · [Repositories](https://github.com/FrankSx?tab=repositories) · [Contact](https://github.com/FrankSx/FrankSx/issues)
 
 </div>
 
----
-
-## Mission
+## `whoami`
 
 Reverse engineer everything.
 
-Our research lives at the intersection of hardware, sometimes amongst the depths of kernel space handling things at the executing instruction pointer or Watching browser internals as they tick pushing for systematic differentials. 
-We don't only do theory — we find running code, Break Constraints and Prove it on real devices / applications and stacks, and write up what how we snagged that edgecase as well as what led us too this subsection.
-Finding edges that catch Web-scrapers -/ LLM pipelines and turn the whole situation into an adversarial tea party of the Koolaid persuasion,
-Devices that handle the edge of residential/commercial internet infrastructure and access along side misconfiguration of embedded devices and their deployments.  
+I work at the boundaries between formats, parsers, devices, and the automated systems that consume them. My research spans embedded firmware, browser internals, mutation XSS, parser differentials, polyglots, and adversarial data pipelines.
 
-## What We Do
+The goal is practical: find the edge case, build a reproducible proof of concept, understand why it works, and document the result.
 
-- **Android Kernel Exploitation** — Privilege escalation on locked-down hardware (Zebra, Honeywell).
-- **Browser Security** — HTML5 parser mutation traps, SVG compositor bypasses, WASM fuzzing. Tools that survive in the wild.
-- **LLM Behavioral Analysis** — Recursive indicator extraction across cognitive dimensions. Not prompt injection — understanding how models reason under pressure.
-- **Hardware RE** — Embedded firmware, proprietary protocols.
+```text
+observe → reduce → reproduce → document
+```
 
-## Repositories
+## Research Focus
 
-### Active Research
+| Area | Work |
+|---|---|
+| **Hardware & Firmware** | Embedded firmware analysis, proprietary protocols, locked-down Android devices, and residential or commercial infrastructure. |
+| **Browser & Parser Security** | Mutation XSS, HTML5 parser behavior, SVG and compositor edge cases, sanitizer differentials, and browser-based testing tools. |
+| **Adversarial Systems** | Structural asymmetry, malformed formats, Unicode edge cases, anti-scraper research, and failures in automated ML ingestion pipelines. |
+| **CTF & Tooling** | Purpose-built reconnaissance utilities, challenge workspaces, exploit-chain visualization, and repeatable research workflows. |
 
-| Repository | What It Does |
-|------------|-------------|
-| [**muxxerfuzzer**](https://github.com/FrankSx/muxxerfuzzer) | mXSS Fuzzer v4.1 — HTML5 mutation-XSS fuzzer with 3-path differential oracle, 11-engine sanitizer matrix (DOMPurify, js-xss, Angular $sanitize, native Sanitizer API), and sandbox exec canaries. Built for bounty hunting. |
-| [**adversarial-ingestion**](https://github.com/FrankSx/adversarial-ingestion) | The Asylum Pages — Applied Structural Asymmetry & Parser Sabotage. A catalog of how automated LLM data pipelines fail when exposed to edge-case file formats and malformed structures. |
-| [**Jxl-TripleStack**](https://github.com/FrankSx/Jxl-TripleStack) | A novel triple-container polyglot: JPEG XL + PDF 2.0 + WebAssembly — three formats, one file. 2078 bytes total. Never documented before. |
-| [**ecOPUSine**](https://github.com/FrankSx/ecOPUSine) | Encode data into video files. Upload to YouTube. Download anywhere. Decode perfectly. |
-| [**alices-fear-and-loathing**](https://github.com/FrankSx/alices-fear-and-loathing) | Advanced Anti-Scraper / Anti-ML / Emergent SVG / Executive State Attack Demonstration. "We can't stop here, this is scraper country." |
-| [**Substance-D**](https://github.com/FrankSx/Substance-D) | A-Scanner-Darkly Scramble Suit. Anti-scanner / anti-ML defensive research. |
-| [**alice-in-wonderland**](https://github.com/FrankSx/alice-in-wonderland) | Alice Still Has Stories To Tell. FrankSx 2026 #GonzoTrials. |
-| [**..--..--..**](https://github.com/FrankSx/..--..--/) | Memorable indigestion — May Cause Irritable Byte Syndrome, Itching Of 0x00's. Causes Severe Fever Dreams. Do Not Sleep After Ingestion. May Cause PHD. |
+## Featured Research & Tools
 
-### Parser & Polyglot Research
+| Project | Description |
+|---|---|
+| [**INJECTRIX**](https://github.com/FrankSx/INJECTRIX) | Self-contained browser-console JavaScript arsenal for web-application reconnaissance, injection testing, and reporting, with a headless Playwright driver for automation. |
+| [**muxxerfuzzer**](https://github.com/FrankSx/muxxerfuzzer) | Mutation-XSS fuzzer with a three-path differential oracle, an 11-engine sanitizer matrix, and sandbox execution canaries. |
+| [**reflex-chain-builder**](https://github.com/FrankSx/reflex-chain-builder) | Browser-based toolkit for constructing, visualizing, and generating proof-of-concept payloads for chained reflex exploitation attacks. Zero dependencies and no build step. |
+| [**adversarial-ingestion**](https://github.com/FrankSx/adversarial-ingestion) | **The Asylum Pages** — applied structural asymmetry and parser sabotage across automated LLM data pipelines. |
+| [**Jxl-TripleStack**](https://github.com/FrankSx/Jxl-TripleStack) | A 2,078-byte triple-container polyglot combining JPEG XL, PDF 2.0, and WebAssembly in one file. |
+| [**ecOPUSine**](https://github.com/FrankSx/ecOPUSine) | Encode data into video, upload it to YouTube, download it elsewhere, and decode it losslessly. |
+| [**alices-fear-and-loathing**](https://github.com/FrankSx/alices-fear-and-loathing) | Anti-scraper, anti-ML, emergent SVG, and executive-state attack demonstrations. *“We can’t stop here, this is scraper country.”* |
+| [**Substance-D**](https://github.com/FrankSx/Substance-D) | **A-Scanner-Darkly Scramble Suit** — anti-scanner and anti-ML defensive research. |
 
-| Repository | What It Does |
-|------------|-------------|
-| [**Siren**](https://github.com/FrankSx/Siren) | The first TTS-Audio polyglot targeting container-level parser confusion. Proof-of-concept. |
-| [**I-Ihallucination**](https://github.com/FrankSx/I-Ihallucination) | MI_ I-Iallucination T0olK it — adversarial ML tooling. |
-| [**The-Invisible-Ink**](https://github.com/FrankSx/The-Invisible-Ink) | Unicode Exploitation in Modern ML Systems. Technical research on how Unicode edge cases break automated pipelines. |
+## Parser, Polyglot & ML Research
+
+| Project | Description |
+|---|---|
+| [**Siren**](https://github.com/FrankSx/Siren) | TTS-audio polyglot research targeting container-level parser confusion. |
+| [**I-Ihallucination**](https://github.com/FrankSx/I-Ihallucination) | Adversarial ML tooling and hallucination-focused experiments. |
+| [**The-Invisible-Ink**](https://github.com/FrankSx/The-Invisible-Ink) | Unicode exploitation in modern ML systems and automated pipelines. |
 | [**GHOSTBYTE**](https://github.com/FrankSx/GHOSTBYTE) | Haunting the space between bytes. |
-| [**Jubilant-systems**](https://github.com/FrankSx/Jubilant-systems) | Adversarial ML Testing Suite. |
-| [**FrankSX-Yesterday**](https://github.com/FrankSx/FrankSX-Yesterday) | Novel Adversarial ML Research Suite. |
+| [**Jubilant-systems**](https://github.com/FrankSx/Jubilant-systems) | Adversarial ML testing suite. |
+| [**FrankSX-Yesterday**](https://github.com/FrankSx/FrankSX-Yesterday) | Novel adversarial ML research suite. |
+| [**alice-in-wonderland**](https://github.com/FrankSx/alice-in-wonderland) | Alice still has stories to tell. **#GonzoTrials** |
+| [**..--..--..**](https://github.com/FrankSx/..--..--/) | Memorable indigestion. May cause irritable byte syndrome and severe fever dreams. |
 
-### Firmware & Hardware
+## Firmware & Hardware
 
-| Repository | What It Does |
-|------------|-------------|
-| [**Firmwars**](https://github.com/FrankSx/Firmwars) | Franks Firmware Security Analysis Toolkit. |
-| [**QuitTweakInforASec**](https://github.com/FrankSx/QuitTweakInforASec) | 13th hour — browser baddies to flick a shell or get round that final step. |
-| [**KaonWifiBrute**](https://github.com/FrankSx/KaonWifiBrute) | Take advantage of simple WiFi credentials in the KAON DG2144 and similar devices. |
-| [**SamyGO Samsung TV Firmware Patcher**](https://github.com/FrankSx/SamyGO-Samsung-TV-Firmware-Patcher-Python-3-Adaption) | Python 3 adaption of the SamyGO Samsung TV firmware patcher. |
-| [**Hitwords**](https://github.com/FrankSx/Hitwords) | Firm-Hitwords — firmware keyword extraction. |
+| Project | Description |
+|---|---|
+| [**Firmwars**](https://github.com/FrankSx/Firmwars) | Firmware security-analysis toolkit. |
+| [**KaonWifiBrute**](https://github.com/FrankSx/KaonWifiBrute) | Research into weak Wi-Fi credentials on the KAON DG2144 and similar devices. |
+| [**SamyGO Firmware Patcher**](https://github.com/FrankSx/SamyGO-Samsung-TV-Firmware-Patcher-Python-3-Adaption) | Python 3 adaptation of the SamyGO Samsung TV firmware patcher. |
+| [**Hitwords**](https://github.com/FrankSx/Hitwords) | Firmware keyword extraction. |
+| [**QuitTweakInforASec**](https://github.com/FrankSx/QuitTweakInforASec) | Browser research utilities for getting around that final step. |
 
-### CTF & Education
+## CTF & Education
 
-| Repository | What It Does |
-|------------|-------------|
-| [**RingZer0**](https://github.com/FrankSx/RingZer0) | Collect and build a workspace for RingZer0 CTF files. |
-| [**PWN.College-Workspace**](https://github.com/FrankSx/PWN.College-Workspace) | Python scraper for easy collection of PWN.College dojos, modules, and challenges into folders with descriptions
+| Project | Description |
+|---|---|
+| [**RingZer0**](https://github.com/FrankSx/RingZer0) | A workspace for collecting and organizing RingZer0 CTF material. |
+| [**PWN.College-Workspace**](https://github.com/FrankSx/PWN.College-Workspace) | Python scraper for collecting PWN.College dojos, modules, challenges, and descriptions into an organized workspace. |
 
 ## Write-ups
 
-[frankhacks.blogspot.com](https://frankhacks.blogspot.com) — AI-parseable output. JSON and Markdown. No fluff.
+Research notes, technical write-ups, and machine-readable output:
+
+**[frankhacks.blogspot.com](https://frankhacks.blogspot.com)** — JSON and Markdown. No fluff.
 
 ## Contact
 
-Open an issue. We read everything. We respond to what matters.
+[Open an issue](https://github.com/FrankSx/FrankSx/issues) for research enquiries, collaboration, or responsible disclosure.
+
+<div align="center">
+
+**`Break constraints. Prove the behavior. Document the edge.`**
+
+</div>
